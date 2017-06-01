@@ -20,46 +20,64 @@ var timer = setInterval(()=>{
 	updateData();
 }, 500);
 
-var nextAnswerCallback = unexpectedAnswer;
+// Socket handler
+
+function findSocket(element, index, array){
+	return element.socket === this;
+}
 
 var connectionListener = function (socket){
 	console.log("New client connected, checking validity...");
 	socket.write("getUID");
-	nextAnswerCallback = checkValidClient;
 
 	socket.on('data', (dataIn)=>{
-		console.log("RX data:"+dataIn);
-		nextAnswerCallback(dataIn, socket);
+		//console.log("RX data:"+dataIn);
+		var knownSocket = clients.find(findSocket, socket);
+		if(knownSocket==undefined){
+			checkValidClient(dataIn, socket);
+		}else{
+			knownSocket.next(dataIn, knownSocket);
+		}
 	});
 
 	socket.on('close', ()=>{
 		console.log("Connection to Client closed.");
-		clients.splice(clients.indexOf(socket));
+		var index = clients.findIndex(findSocket, socket);
+		if(index != -1){
+			clients.splice(index,1);
+		}
 	});
 };
 
 // Answer handler
 
-var unexpectedAnswer = function(answer, socket){
-	console.log("Unexpected Answer:"+answer);
-};
-
 var checkValidClient = function(answer, socket){
 	var validUID = /\d\d:\d\d:\d\d:\d\d/;
 	if(String(answer).match(validUID)!=null){
 		console.log("Client valid!");
-		clients.push(socket);
+		clients.push({
+			socket: socket,
+			next: 	unexpectedAnswer
+		});
 	}else{
 		console.log("Client not valid!");
 		socket.end();
 	}
-	nextAnswerCallback = unexpectedAnswer;
 };
+
+var unexpectedAnswer = function(answer, socketBundle){
+	console.log("Unexpected Answer:"+answer);
+};
+
+function ActPos(answer, socketBundle){
+	socketBundle.next = unexpectedAnswer;
+}
 
 // Commands
 
-var getPos = function(client){
-	client.write("GetPos?");
+var getPos = function(socketBundle){
+	socketBundle.next = ActPos;
+	socketBundle.socket.write("GetPos?");
 };
 
 // Update data
