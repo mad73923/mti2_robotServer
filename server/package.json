@@ -1,0 +1,15 @@
+{
+  "name": "robotcontrol",
+  "version": "1.0.0",
+  "description": "Control dashboard to navigate robots and check their parameters.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs index.js"
+  },
+  "author": "Felix Danneberg, Thomas Klett, Matthias Weis",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
