@@ -6,6 +6,8 @@ var clients = new Array();
 
 console.log("Start Robot-Server at localhost:"+port);
 
+// Server
+
 var server = net.createServer(function(socket){
 	connectionListener(socket);
 });
@@ -18,7 +20,7 @@ server.listen(port, '127.0.0.1', function(){
 
 var timer = setInterval(()=>{
 	updateData();
-}, 500);
+}, 2000);
 
 // Socket handler
 
@@ -31,12 +33,12 @@ function connectionListener(socket){
 	socket.write("getUID");
 
 	socket.on('data', (dataIn)=>{
-		//console.log("RX data:"+dataIn);
+		console.log("RX data:"+dataIn);
 		var knownSocket = clients.find(findSocket, socket);
 		if(knownSocket==undefined){
 			checkValidClient(dataIn, socket);
 		}else{
-			knownSocket.next(dataIn, knownSocket);
+			handleAnswer(dataIn, knownSocket);
 		}
 	});
 
@@ -52,13 +54,23 @@ function connectionListener(socket){
 
 // Answer handler
 
+function handleAnswer(answer, socketBundle){
+	var next = socketBundle.answerQueue.pop();
+	if(next != undefined){
+		next(answer, socketBundle);
+	}else{
+		unexpectedAnswer(answer, socketBundle);
+	}
+}
+
 function checkValidClient(answer, socket){
 	var validUID = /\d\d:\d\d:\d\d:\d\d/;
 	if(String(answer).match(validUID)!=null){
 		console.log("Client valid! UID:"+answer);
 		clients.push({
 			socket: socket,
-			next: 	unexpectedAnswer,
+			commandQueue: 	[],
+			answerQueue: 	[],
 			uid: 	answer
 		});
 	}else{
@@ -72,19 +84,48 @@ function unexpectedAnswer(answer, socketBundle){
 };
 
 function ActPos(answer, socketBundle){
-	socketBundle.next = unexpectedAnswer;
+	socketBundle.pos = String(answer);
+	nextCommand(socketBundle);
 };
+
+function ActDistances(answer, socketBundle){
+	socketBundle.distances = String(answer);
+	nextCommand(socketBundle);
+}
+
+function nextCommand(socketBundle){
+	var next = socketBundle.commandQueue.pop();
+	if(next != undefined){
+		next(socketBundle);
+	}
+}
 
 // Commands
 
+function queueCommand(socketBundle, command, next){
+	socketBundle.answerQueue.push(next);
+	if(socketBundle.answerQueue.length > 1){
+		socketBundle.answerQueue.push(function(){
+			socketBundle.socket.write(command)
+		});
+	}else{
+		socketBundle.socket.write(command);
+	}
+}
+
 function getPos(socketBundle){
-	socketBundle.next = ActPos;
-	socketBundle.socket.write("GetPos?");
+	queueCommand(socketBundle, "GetPos?", ActPos);
 };
+
+function getDistances(socketBundle){
+	queueCommand(socketBundle, "GetDistances?", ActDistances);
+}
 
 // Update data
 function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
+		//getDistances(item);
 	});
+	console.log(clients);
 };
