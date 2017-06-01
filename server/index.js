@@ -105,7 +105,7 @@ function nextCommand(socketBundle){
 function queueCommand(socketBundle, command, next){
 	socketBundle.answerQueue.push(next);
 	if(socketBundle.answerQueue.length > 1){
-		socketBundle.answerQueue.push(function(){
+		socketBundle.commandQueue.push(function(){
 			socketBundle.socket.write(command)
 		});
 	}else{
@@ -125,7 +125,7 @@ function getDistances(socketBundle){
 function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
-		//getDistances(item);
+		getDistances(item);
 	});
 	console.log(clients);
 };
