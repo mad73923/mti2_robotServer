@@ -19,7 +19,7 @@ connection.on('end', ()=>{
 });
 
 connection.on('data', (dataIn) =>{
-	setTimeout(handleCommand, Math.random()*1000, dataIn);
+	setTimeout(handleCommand, Math.random()*500, dataIn);
 });
 
 function handleCommand(dataIn){

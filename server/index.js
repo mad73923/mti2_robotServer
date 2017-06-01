@@ -20,7 +20,7 @@ server.listen(port, '127.0.0.1', function(){
 
 var timer = setInterval(()=>{
 	updateData();
-}, 1000);
+}, 500);
 
 // Socket handler
 
@@ -102,14 +102,20 @@ function nextCommand(socketBundle){
 	}
 };
 
+function findFunction(element, index, array){
+	return element === this;
+};
+
 function queueCommand(socketBundle, command, next){
-	socketBundle.answerQueue.unshift(next);
-	if(socketBundle.answerQueue.length > 1){
-		socketBundle.commandQueue.unshift(function(){
-			socketBundle.socket.write(command)
-		});
-	}else{
-		socketBundle.socket.write(command);
+	if(socketBundle.answerQueue.findIndex(findFunction, next)==-1){
+		socketBundle.answerQueue.unshift(next);
+		if(socketBundle.answerQueue.length > 1){
+			socketBundle.commandQueue.unshift(function(){
+				socketBundle.socket.write(command)
+			});
+		}else{
+			socketBundle.socket.write(command);
+		}
 	}
 }
 
@@ -124,8 +130,8 @@ function getDistances(socketBundle){
 // Update data
 function updateData(){
 	clients.forEach(function(item){
-		getDistances(item);
 		getPos(item);
+		getDistances(item);
 	});
-	console.log(clients);
+	//console.log(clients);
 };
