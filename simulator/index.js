@@ -22,4 +22,10 @@ connection.on('data', (dataIn) =>{
 	if(dataIn=="getUID"){
 		connection.write("11:22:33:44");
 	}
+	if(dataIn=="GetPos?"){
+		connection.write("ActPos=3202,1704,68")
+	}
+	if(dataIn=="GetDistances?"){
+		connection.write("ActDistances=150,342,242,324,213,4,2,35,23")
+	}
 });
