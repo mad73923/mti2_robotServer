@@ -16,6 +16,13 @@ server.listen(port, '127.0.0.1', function(){
 	console.log("Server started!");
 });
 
+// Exit program
+process.on('SIGINT', () => {
+	console.log("Stopping server, bye!");
+	server.close();
+	process.exit();
+});
+
 // Intervall function
 
 var timer = setInterval(()=>{
