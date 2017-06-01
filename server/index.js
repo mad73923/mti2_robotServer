@@ -61,7 +61,8 @@ function handleAnswer(answer, socketBundle){
 	}else{
 		unexpectedAnswer(answer, socketBundle);
 	}
-}
+	nextCommand(socketBundle);
+};
 
 function checkValidClient(answer, socket){
 	var validUID = /\d\d:\d\d:\d\d:\d\d/;
@@ -85,22 +86,20 @@ function unexpectedAnswer(answer, socketBundle){
 
 function ActPos(answer, socketBundle){
 	socketBundle.pos = String(answer);
-	nextCommand(socketBundle);
 };
 
 function ActDistances(answer, socketBundle){
 	socketBundle.distances = String(answer);
-	nextCommand(socketBundle);
-}
+};
+
+// Commands
 
 function nextCommand(socketBundle){
 	var next = socketBundle.commandQueue.pop();
 	if(next != undefined){
 		next(socketBundle);
 	}
-}
-
-// Commands
+};
 
 function queueCommand(socketBundle, command, next){
 	socketBundle.answerQueue.push(next);
