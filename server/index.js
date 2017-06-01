@@ -20,7 +20,7 @@ server.listen(port, '127.0.0.1', function(){
 
 var timer = setInterval(()=>{
 	updateData();
-}, 2000);
+}, 1000);
 
 // Socket handler
 
@@ -103,9 +103,9 @@ function nextCommand(socketBundle){
 };
 
 function queueCommand(socketBundle, command, next){
-	socketBundle.answerQueue.push(next);
+	socketBundle.answerQueue.unshift(next);
 	if(socketBundle.answerQueue.length > 1){
-		socketBundle.commandQueue.push(function(){
+		socketBundle.commandQueue.unshift(function(){
 			socketBundle.socket.write(command)
 		});
 	}else{
@@ -124,8 +124,8 @@ function getDistances(socketBundle){
 // Update data
 function updateData(){
 	clients.forEach(function(item){
-		getPos(item);
 		getDistances(item);
+		getPos(item);
 	});
 	console.log(clients);
 };

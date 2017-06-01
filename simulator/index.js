@@ -19,6 +19,10 @@ connection.on('end', ()=>{
 });
 
 connection.on('data', (dataIn) =>{
+	setTimeout(handleCommand, Math.random()*1000, dataIn);
+});
+
+function handleCommand(dataIn){
 	if(dataIn=="getUID"){
 		connection.write("11:22:33:44");
 	}
@@ -28,4 +32,4 @@ connection.on('data', (dataIn) =>{
 	if(dataIn=="GetDistances?"){
 		connection.write("ActDistances=150,342,242,324,213,4,2,35,23")
 	}
-});
+};
