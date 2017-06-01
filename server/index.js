@@ -72,7 +72,8 @@ function checkValidClient(answer, socket){
 			socket: socket,
 			commandQueue: 	[],
 			answerQueue: 	[],
-			uid: 	answer
+			uid: 	String(answer),
+			data: 			{}
 		});
 	}else{
 		console.log("Client not valid!");
@@ -85,11 +86,11 @@ function unexpectedAnswer(answer, socketBundle){
 };
 
 function ActPos(answer, socketBundle){
-	socketBundle.pos = String(answer);
+	socketBundle.data.pos = String(answer);
 };
 
 function ActDistances(answer, socketBundle){
-	socketBundle.distances = String(answer);
+	socketBundle.data.distances = String(answer);
 };
 
 // Commands
