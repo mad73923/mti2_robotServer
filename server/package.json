@@ -4,7 +4,7 @@
   "description": "Control dashboard to navigate robots and check their parameters.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node main.js"
   },
   "author": "Felix Danneberg, Thomas Klett, Matthias Weis",
   "license": "ISC",

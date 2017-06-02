@@ -24,6 +24,17 @@ exports.stopServer = function(){
 	server.close();
 }
 
+exports.getClientData = function(){
+	var ret = new Array();
+	clients.forEach(function(item){
+		ret.push({
+			uid: 	item.uid,
+			data: 	item.data 
+		});
+	});
+	return ret;
+};
+
 // Intervall function
 
 var timer = setInterval(()=>{

@@ -2,7 +2,7 @@ var robotServer = require("./robotServer.js");
 var UIServer = require("./UIServer.js");
 
 robotServer.startServer();
-UIServer.startServer();
+UIServer.startServer(robotServer);
 
 // Exit program
 process.on('SIGINT', () => {
