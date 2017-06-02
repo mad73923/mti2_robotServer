@@ -1,4 +1,4 @@
-var robotServer = require("./index.js");
+var robotServer = require("./robotServer.js");
 var UIServer = require("./UIServer.js");
 
 robotServer.startServer();

@@ -100,7 +100,7 @@ function checkValidClient(answer, socket){
 };
 
 function unexpectedAnswer(answer, socketBundle){
-	console.log("Unexpected Answer:"+answer);
+	console.log("Unexpected Answer from UID "+socketBundle.uid+" :"+answer);
 };
 
 function ActPos(answer, socketBundle){
