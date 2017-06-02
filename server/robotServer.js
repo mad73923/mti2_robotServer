@@ -52,7 +52,7 @@ function connectionListener(socket){
 	socket.write("getUID");
 
 	socket.on('data', (dataIn)=>{
-		console.log("RX data:"+dataIn);
+		//console.log("RX data:"+dataIn);
 		var knownSocket = clients.find(findSocket, socket);
 		if(knownSocket==undefined){
 			checkValidClient(dataIn, socket);
@@ -100,7 +100,7 @@ function handleAnswer(answer, socketBundle){
 };
 
 function checkValidClient(answer, socket){
-	var validUID = /\d\d:\d\d:\d\d:\d\d/;
+	var validUID = /\d\d(:\d\d){3}/;
 	if(String(answer).match(validUID)!=null){
 		console.log("Client valid! UID:"+answer);
 		createNewClient(socket, String(answer));
