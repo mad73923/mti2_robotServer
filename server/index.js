@@ -2,9 +2,9 @@ var port = 2323;
 
 var net = require('net');
 
-var clients = new Array();
+var exports = module.exports = {};
 
-console.log("Start Robot-Server at localhost:"+port);
+var clients = new Array();
 
 // Server
 
@@ -12,16 +12,17 @@ var server = net.createServer(function(socket){
 	connectionListener(socket);
 });
 
-server.listen(port, '127.0.0.1', function(){
-	console.log("Server started!");
-});
+exports.startServer = function(){
+	console.log("Start Robot-Server at localhost:"+port);
+	server.listen(port, '127.0.0.1', function(){
+		console.log("Robot-Server started!");
+	});
+};
 
-// Exit program
-process.on('SIGINT', () => {
-	console.log("Stopping server, bye!");
+exports.stopServer = function(){
+	console.log("Stopping Robot-Server!");
 	server.close();
-	process.exit();
-});
+}
 
 // Intervall function
 
@@ -51,13 +52,29 @@ function connectionListener(socket){
 
 	socket.on('close', ()=>{
 		console.log("Connection to client closed.");
-		var index = clients.findIndex(findSocket, socket);
-		if(index != -1){
-			console.log("Deleted client UID:"+clients[index].uid);
-			clients.splice(index,1);
-		}
+		deleteClientIfExists(socket);
 	});
 };
+
+// Clients
+
+function createNewClient(socket, uid){
+	clients.push({
+			socket: 		socket,
+			commandQueue: 	[],
+			answerQueue: 	[],
+			uid: 			uid,
+			data: 			{}
+		});
+}
+
+function deleteClientIfExists(socket){
+	var index = clients.findIndex(findSocket, socket);
+	if(index != -1){
+		console.log("Deleted client UID:"+clients[index].uid);
+		clients.splice(index,1);
+	}
+}
 
 // Answer handler
 
@@ -75,13 +92,7 @@ function checkValidClient(answer, socket){
 	var validUID = /\d\d:\d\d:\d\d:\d\d/;
 	if(String(answer).match(validUID)!=null){
 		console.log("Client valid! UID:"+answer);
-		clients.push({
-			socket: socket,
-			commandQueue: 	[],
-			answerQueue: 	[],
-			uid: 	String(answer),
-			data: 			{}
-		});
+		createNewClient(socket, String(answer));
 	}else{
 		console.log("Client not valid!");
 		socket.end();
