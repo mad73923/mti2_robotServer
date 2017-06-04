@@ -2,7 +2,7 @@
 
 ## Install packages
 
-(not tested on Pi!! package installation might be different)
+(not tested on Pi yet!! package installation might be different)
 
 Packages needed:
 
@@ -27,10 +27,10 @@ cd server
 npm start
 ```
 
-UI available at 'localhost:8080'
-Robot port at 'localhost:2323'
+UI available at `localhost:8080`
+Robot port at `localhost:2323`
 
-Open UI from external: 'http://<IP of Pi>:8080'
+Open UI from external: `http://<IP of Pi>:8080`
 
 ## Start Simulator
 
@@ -39,6 +39,6 @@ cd simulator
 node index.js &
 ```
 
-Simulator can be started several times ('&').
+Simulator can be started several times (`&`).
 
-Simulator exits on 'Strg+C' or connection loss.
+Simulator exits on `Strg+C` or connection loss (kill server).
