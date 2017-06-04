@@ -9,8 +9,14 @@ Packages needed:
 *	npm
 * 	node.js
 
+First add new installation source 
 ```
-sudo apt-get install npm node
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+```
+
+Then install:
+```
+sudo apt-get install npm nodejs
 ```
 
 ## Install dependencies
@@ -36,7 +42,7 @@ Open UI from external: `http://<IP of Pi>:8080`
 
 ```
 cd simulator
-node index.js &
+nodejs index.js &
 ```
 
 Simulator can be started several times (`&`).
