@@ -24,12 +24,12 @@ connection.on('data', (dataIn) =>{
 
 function handleCommand(dataIn){
 	if(dataIn=="getUID"){
-		connection.write("11:22:33:44");
+		connection.write("11:22:33:44:55:66:77:88:99:AA:BB:CC");
 	}
 	if(dataIn=="GetPos?"){
-		connection.write("ActPos=3202,1704,68")
+		connection.write("ActPos=[3202,1704,68]")
 	}
 	if(dataIn=="GetDistances?"){
-		connection.write("ActDistances=150,342,242,324,213,4,2,35,23")
+		connection.write("ActDistances=[150,342,242,324,213,4,2,35,23]")
 	}
 };

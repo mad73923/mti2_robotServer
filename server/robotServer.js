@@ -100,7 +100,7 @@ function handleAnswer(answer, socketBundle){
 };
 
 function checkValidClient(answer, socket){
-	var validUID = /\d\d(:\d\d){3}/;
+	var validUID = /[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){11}/;
 	if(String(answer).match(validUID)!=null){
 		console.log("Client valid! UID:"+answer);
 		createNewClient(socket, String(answer));
