@@ -14,7 +14,7 @@ var server = net.createServer(function(socket){
 
 exports.startServer = function(){
 	console.log("Start Robot-Server at localhost:"+port);
-	server.listen(port, '127.0.0.1', function(){
+	server.listen(port, '0.0.0.0', function(){
 		console.log("Robot-Server started!");
 	});
 };
