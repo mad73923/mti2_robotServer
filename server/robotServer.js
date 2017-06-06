@@ -49,7 +49,7 @@ function findSocket(element, index, array){
 
 function connectionListener(socket){
 	console.log("New client connected, checking validity...");
-	socket.write("getUID");
+	socket.write("GetUID?");
 
 	socket.on('data', (dataIn)=>{
 		//console.log("RX data:"+dataIn);
@@ -100,10 +100,11 @@ function handleAnswer(answer, socketBundle){
 };
 
 function checkValidClient(answer, socket){
-	var validUID = /[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){11}/;
-	if(String(answer).match(validUID)!=null){
-		console.log("Client valid! UID:"+answer);
-		createNewClient(socket, String(answer));
+	var validUID = /UID=[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){11}/;
+	var strAnswer = String(answer);
+	if(strAnswer.match(validUID)!=null){
+		console.log("Client valid! "+answer);
+		createNewClient(socket, strAnswer.split("=")[1]);
 	}else{
 		console.log("Client not valid!");
 		socket.end();

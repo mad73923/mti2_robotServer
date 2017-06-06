@@ -23,8 +23,8 @@ connection.on('data', (dataIn) =>{
 });
 
 function handleCommand(dataIn){
-	if(dataIn=="getUID"){
-		connection.write("11:22:33:44:55:66:77:88:99:AA:BB:CC");
+	if(dataIn=="GetUID?"){
+		connection.write("UID=11:22:33:44:55:66:77:88:99:AA:BB:CC");
 	}
 	if(dataIn=="GetPos?"){
 		connection.write("ActPos=[3202,1704,68]")
