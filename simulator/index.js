@@ -23,6 +23,7 @@ connection.on('data', (dataIn) =>{
 });
 
 function handleCommand(dataIn){
+	var dataInStr = String(dataIn);
 	if(dataIn=="GetUID?"){
 		connection.write("UID=11:22:33:44:55:66:77:88:99:AA:BB:CC");
 	}
@@ -31,5 +32,11 @@ function handleCommand(dataIn){
 	}
 	if(dataIn=="GetDistances?"){
 		connection.write("ActDistances=[150,342,242,324,213,4,2,35,23]")
+	}
+	if(dataInStr.match(/DriveTurn![-]?\d+/)!=null){
+		connection.write("DriveTurn=OK");
+	}
+	if(dataInStr.match(/DriveStraight![-]?\d+/)!=null){
+		connection.write("DriveStraight=OK");
 	}
 };

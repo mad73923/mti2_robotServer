@@ -123,6 +123,14 @@ function ActDistances(answer, socketBundle){
 	socketBundle.data.distances = String(answer);
 };
 
+function DriveTurn(answer, socketBundle){
+
+};
+
+function DriveStraight(answer, socketBundle){
+
+};
+
 // Commands
 
 function nextCommand(socketBundle){
@@ -155,13 +163,23 @@ function getPos(socketBundle){
 
 function getDistances(socketBundle){
 	queueCommand(socketBundle, "GetDistances?", ActDistances);
-}
+};
+
+function driveTurn(socketBundle, value){
+	queueCommand(socketBundle, "DriveTurn!"+String(value), DriveTurn);
+};
+
+function driveStraight(socketBundle, value){
+	queueCommand(socketBundle, "DriveStraight!"+String(value), DriveStraight);
+};
 
 // Update data
 function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
 		getDistances(item);
+		driveTurn(item, -90);
+		driveStraight(item, 120);
 	});
 	//console.log(clients);
 };
