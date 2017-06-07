@@ -5,9 +5,11 @@
 <title>Mission Control</title>
 <script src="/node_modules/angular/angular.js"></script>
 <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+<script src="/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="/node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
 <script src="UIscript.js"></script>
 </head>
-<body ng-Controller="dataCtrl">
+<body >
 	<div>
 	<br/>
 		<div class="panel panel-default">
@@ -15,7 +17,17 @@
 		    <h3>Basic panel example</h3>
 		  </div>
 		</div>
-		  {{clients}}
+		<div ng-Controller="dataCtrl">
+			{{clients}}
+		</div>
+		<div class="col-lg-6 col-sm-12" id="radar-chart" ng-Controller="radarCtrl">
+			<div class="panel panel-default">
+				<div class="panel-heading">Radar</div>
+				<div class="panel-body">
+					<canvas id="radar" class="chart chart-radar" chart-data="chart.data" chart-labels="chart.labels" ng-show="true"></canvas>
+				</div>
+			</div>
+		</div>
 	</div>
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

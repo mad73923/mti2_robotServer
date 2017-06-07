@@ -1,4 +1,4 @@
-var dataApp = angular.module('dataApp', []);
+var dataApp = angular.module('dataApp', ['chart.js']);
 
 dataApp.controller('dataCtrl', function($scope, $http){
 	setInterval(()=>{
@@ -11,3 +11,13 @@ function updateClients($scope, $http){
 		$scope.clients = data.data;
 	});
 };
+
+dataApp.controller('radarCtrl', function($scope){
+	$scope.chart = {};
+	$scope.chart.labels = [];
+	$scope.chart.data = [];
+	for(i=1; i<=36; i++){
+		$scope.chart.labels.push(String((i-1)*10)+"°");
+		$scope.chart.data.push(Math.random()*20);
+	}
+});
