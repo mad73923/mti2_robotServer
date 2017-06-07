@@ -48,3 +48,7 @@ nodejs index.js &
 Simulator can be started several times (`&`).
 
 Simulator exits on `Strg+C` or connection loss (kill server).
+
+# Configuration of Raspberry Pi
+
+[Tutorial](https://www.elektronik-kompendium.de/sites/raspberry-pi/2002161.htm) (German).
