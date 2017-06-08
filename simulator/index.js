@@ -6,13 +6,17 @@ console.log("Start Robot-Simulator. Connect to localhost:"+port);
 
 var connection = net.createConnection({port: port});
 
-var temp = new Buffer(1);
-uidStr = "";
-for(i=0; i<12; i++){
-	temp[0]=Math.round(Math.random()*255);
-	uidStr = uidStr + temp.toString('hex') + ":";
+var uidStr = generateRandomUID();
+
+function generateRandomUID(){
+	var temp = new Buffer(1);
+	uidStr = "";
+	for(i=0; i<12; i++){
+		temp[0]=Math.round(Math.random()*255);
+		uidStr = uidStr + temp.toString('hex') + ":";
+	}
+	return uidStr.slice(0,-1);
 }
-uidStr = uidStr.slice(0,-1);
 
 connection.on('error', (er)=>{
 	console.log("Couldn't establish connection to Server.\nDid you start the server?\n"+er);

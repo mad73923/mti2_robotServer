@@ -22,10 +22,10 @@
 				<li><a href="#home" ng-click="setTempItemIndex(-1)">Home</a></li>
 				<li ng-repeat="client in clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
 			</ul>
-			<div id="{{currentItemIndex}}" class="tab-content">
+			<div id="{{currentItemIndex}}" class="tab-content"  ng-show="currentItemIndex!=-1">
 				<div class="tab-pane active" role="tabpanel">
 					{{currentItemIndex}}
-					<div class="col-lg-3 col-sm-6" id="radar-chart" ng-show="currentItemIndex!=-1">
+					<div class="col-lg-3 col-sm-6" id="radar-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">Radar</div>
                             <div class="panel-body">
