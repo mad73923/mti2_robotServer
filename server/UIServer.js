@@ -5,10 +5,10 @@ var io = require('socket.io')(http);
 
 // io server
 io.on('connection', function(socket){
-  console.log('io: a user connected');
+  //console.log('io: a user connected');
 
   socket.on('disconnect', function(){
-    console.log('io: user disconnected');
+    //console.log('io: user disconnected');
   });
 });
 
@@ -46,6 +46,9 @@ exports.startServer = function(pRobotServer){
 	console.log("Start UI-Server at localhost:"+port);
 	server = http.listen(port,function(){
 	  console.log("UI-Server started!");
+	});
+	robotServer.emitter.on('newData',()=>{
+		io.send(robotServer.getClientData());
 	});
 };
 

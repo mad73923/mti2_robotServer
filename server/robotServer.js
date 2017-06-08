@@ -2,6 +2,15 @@ var port = 2323;
 
 var net = require('net');
 
+const EventEmitter = require('events');
+const util = require('util');
+
+function RobotServerEmitter(){
+	EventEmitter.call(this);
+}
+
+util.inherits(RobotServerEmitter, EventEmitter);
+
 var exports = module.exports = {};
 
 var clients = new Array();
@@ -34,6 +43,8 @@ exports.getClientData = function(){
 	});
 	return ret;
 };
+
+exports.emitter = new RobotServerEmitter();
 
 // Intervall function
 
@@ -225,6 +236,7 @@ function answActDistances(answer, socketBundle){
 			}
 			labels.unshift(labels.pop());
 		}
+		exports.emitter.emit('newData');
 	}else{
 		wrongFormat(socketBundle, answer, validAnswer);
 	}
