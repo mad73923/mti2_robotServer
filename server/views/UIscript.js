@@ -4,7 +4,9 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	updateClients($scope, $http);
 	setInterval(()=>{
 		updateClients($scope, $http);
-	}, 10000);
+	}, 500);
+
+	$scope.currentItemIndex = -1;
 
 	$scope.chart = {};
 	$scope.chart.labels = [];
@@ -16,6 +18,10 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	setInterval(()=>{
 		randomRadar($scope);
 	}, 500);
+
+	$scope.setTempItemIndex = function(index){
+		$scope.currentItemIndex = index;
+	};
 });
 
 function updateClients($scope, $http){
