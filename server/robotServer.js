@@ -102,6 +102,7 @@ function deleteClientIfExists(socket){
 
 function deleteIfUIDAlreadyExists(uid){
 	var index = clients.findIndex(findUID, uid);
+	console.log("in delete function index:"+index);
 	if(index != -1){
 		console.log("Delete old client with same UID");
 		clients.splice(index,1);
