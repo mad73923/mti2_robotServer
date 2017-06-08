@@ -74,6 +74,10 @@ function connectionListener(socket){
 
 // Clients
 
+function findUID(element, index, array){
+	return element.uid === this;
+}
+
 function createNewClient(socket, uid){
 	clients.push({
 			socket: 		socket,
@@ -96,6 +100,14 @@ function deleteClientIfExists(socket){
 	}
 }
 
+function deleteIfUIDAlreadyExists(uid){
+	var index = clients.findIndex(findUID, uid);
+	if(index != -1){
+		console.log("Delete old client with same UID");
+		clients.splice(index,1);
+	}
+}
+
 // Answer handler
 
 function handleAnswer(answer, socketBundle){
@@ -113,6 +125,7 @@ function checkValidClient(answer, socket){
 	var strAnswer = String(answer);
 	if(strAnswer.match(validUID)!=null){
 		console.log("Client valid! "+answer);
+		deleteIfUIDAlreadyExists(strAnswer.split("="));
 		createNewClient(socket, strAnswer.split("=")[1]);
 	}else{
 		console.log("Client not valid!");
