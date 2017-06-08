@@ -134,6 +134,7 @@ function ActDistances(answer, socketBundle){
 	if(strAnswer.match(validAnswer)!=null){
 		strAnswer = strAnswer.split("=")[1];
 		socketBundle.data.radar.distances = JSON.parse(strAnswer);
+		socketBundle.data.radar.distances.reverse();
 		if(socketBundle.data.radar.distances.length != socketBundle.data.radar.labels.length){
 			socketBundle.data.radar.labels = [];
 			labels = socketBundle.data.radar.labels;
@@ -144,8 +145,6 @@ function ActDistances(answer, socketBundle){
 			}
 			labels.unshift(labels.pop());
 		}
-	}else{
-		console.log(strAnswer);
 	}
 };
 
