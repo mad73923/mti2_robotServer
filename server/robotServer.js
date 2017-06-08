@@ -65,6 +65,11 @@ function connectionListener(socket){
 		console.log("Connection to client closed.");
 		deleteClientIfExists(socket);
 	});
+
+	socket.on('error', ()=>{
+		console.log("Connection error.");
+		deleteClientIfExists(socket);
+	});
 };
 
 // Clients
