@@ -75,6 +75,7 @@ function connectionListener(socket){
 // Clients
 
 function findUID(element, index, array){
+	console.log(element.uid+"=?"+this);
 	return element.uid === this;
 }
 
