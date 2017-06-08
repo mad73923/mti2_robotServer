@@ -136,19 +136,78 @@ function checkValidClient(answer, socket){
 };
 
 function unexpectedAnswer(answer, socketBundle){
-	console.log("Unexpected Answer from UID "+socketBundle.uid+" :"+answer);
+	console.log("Unexpected Message from UID "+socketBundle.uid+" :"+answer);
 };
 
-function ActPos(answer, socketBundle){
-	var strAnswer = String(answer);
-	var validAnswer = /ActPos=\[\d+(,\d+)*\]/
-	if(strAnswer.match(validAnswer)!=null){
-		strAnswer = strAnswer.split("=")[1];
-		socketBundle.data.pos = JSON.parse(strAnswer);
+function wrongFormat(socketBundle, answer, format){
+	console.log("Wrong format UID "+socketBundle.uid+"\nexpected\n"+format+"\nreceived\n"+answer);
+}
+
+// Commands
+
+function nextCommand(socketBundle){
+	var next = socketBundle.commandQueue.pop();
+	if(next != undefined){
+		next(socketBundle);
 	}
 };
 
-function ActDistances(answer, socketBundle){
+function findFunction(element, index, array){
+	return element === this;
+};
+
+function queueGetter(socketBundle, command, next){
+	if(socketBundle.answerQueue.findIndex(findFunction, next)==-1){
+		queueSetter(socketBundle, command, next);
+	}
+}
+
+function queueSetter(socketBundle, command, next){
+	socketBundle.answerQueue.unshift(next);
+	if(socketBundle.answerQueue.length > 1){
+		socketBundle.commandQueue.unshift(function(){
+			socketBundle.socket.write(command)
+		});
+	}else{
+		socketBundle.socket.write(command);
+	}
+}
+
+// Update data
+function updateData(){
+	clients.forEach(function(item){
+		getPos(item);
+		getDistances(item);
+		//driveTurn(item, -90);
+		//driveStraight(item, 120);
+	});
+	//console.log(clients);
+};
+
+// ================== Robot functions ==================================
+// ====================== GETTER =======================================
+
+
+function getPos(socketBundle){
+	queueGetter(socketBundle, "GetPos?", answActPos);
+};
+
+function answActPos(answer, socketBundle){
+	var strAnswer = String(answer);
+	var validAnswer = /ActPos=\[\d+(,\d+){2}\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.pos = JSON.parse(strAnswer);
+	}else{
+		wrongFormat(socketBundle, answer, validAnswer);
+	}
+};
+
+function getDistances(socketBundle){
+	queueGetter(socketBundle, "GetDistances?", answActDistances);
+};
+
+function answActDistances(answer, socketBundle){
 	var strAnswer = String(answer);
 	var validAnswer = /ActDistances=\[\d+(,\d+)*\]/
 	if(strAnswer.match(validAnswer)!=null){
@@ -166,66 +225,25 @@ function ActDistances(answer, socketBundle){
 			}
 			labels.unshift(labels.pop());
 		}
+	}else{
+		wrongFormat(socketBundle, answer, validAnswer);
 	}
 };
 
-function DriveTurn(answer, socketBundle){
-
-};
-
-function DriveStraight(answer, socketBundle){
-
-};
-
-// Commands
-
-function nextCommand(socketBundle){
-	var next = socketBundle.commandQueue.pop();
-	if(next != undefined){
-		next(socketBundle);
-	}
-};
-
-function findFunction(element, index, array){
-	return element === this;
-};
-
-function queueCommand(socketBundle, command, next){
-	if(socketBundle.answerQueue.findIndex(findFunction, next)==-1){
-		socketBundle.answerQueue.unshift(next);
-		if(socketBundle.answerQueue.length > 1){
-			socketBundle.commandQueue.unshift(function(){
-				socketBundle.socket.write(command)
-			});
-		}else{
-			socketBundle.socket.write(command);
-		}
-	}
-}
-
-function getPos(socketBundle){
-	queueCommand(socketBundle, "GetPos?", ActPos);
-};
-
-function getDistances(socketBundle){
-	queueCommand(socketBundle, "GetDistances?", ActDistances);
-};
+// ====================== SETTER =======================================
 
 function driveTurn(socketBundle, value){
-	queueCommand(socketBundle, "DriveTurn!"+String(value), DriveTurn);
+	queueSetter(socketBundle, "DriveTurn!"+String(value), answDriveTurn);
+};
+
+function answDriveTurn(answer, socketBundle){
+
 };
 
 function driveStraight(socketBundle, value){
-	queueCommand(socketBundle, "DriveStraight!"+String(value), DriveStraight);
+	queueSetter(socketBundle, "DriveStraight!"+String(value), answDriveStraight);
 };
 
-// Update data
-function updateData(){
-	clients.forEach(function(item){
-		getPos(item);
-		getDistances(item);
-		//driveTurn(item, -90);
-		//driveStraight(item, 120);
-	});
-	//console.log(clients);
+function answDriveStraight(answer, socketBundle){
+
 };
