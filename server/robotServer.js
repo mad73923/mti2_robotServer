@@ -135,6 +135,7 @@ function ActDistances(answer, socketBundle){
 		strAnswer = strAnswer.split("=")[1];
 		socketBundle.data.radar.distances = JSON.parse(strAnswer);
 		socketBundle.data.radar.distances.reverse();
+		socketBundle.data.radar.distances.unshift(socketBundle.data.radar.distances.pop());
 		if(socketBundle.data.radar.distances.length != socketBundle.data.radar.labels.length){
 			socketBundle.data.radar.labels = [];
 			labels = socketBundle.data.radar.labels;
