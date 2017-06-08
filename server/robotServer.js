@@ -75,7 +75,11 @@ function createNewClient(socket, uid){
 			commandQueue: 	[],
 			answerQueue: 	[],
 			uid: 			uid,
-			data: 			{}
+			data: 			{
+				radar: 			{
+					labels: 		[]
+				}
+			}
 		});
 }
 
@@ -116,11 +120,31 @@ function unexpectedAnswer(answer, socketBundle){
 };
 
 function ActPos(answer, socketBundle){
-	socketBundle.data.pos = String(answer);
+	var strAnswer = String(answer);
+	var validAnswer = /ActPos=\[\d+(,\d+)*\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.pos = JSON.parse(strAnswer);
+	}
 };
 
 function ActDistances(answer, socketBundle){
-	socketBundle.data.distances = String(answer);
+	var strAnswer = String(answer);
+	var validAnswer = /ActDistances=\[\d+(,\d+)*\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.radar.distances = JSON.parse(strAnswer);
+		if(socketBundle.data.radar.distances.length != socketBundle.data.radar.labels.length){
+			socketBundle.data.radar.labels = [];
+			labels = socketBundle.data.radar.labels;
+			var len = socketBundle.data.radar.distances.length;
+			var step = 360/len;
+			for(i=1; i<=len; i++){
+				labels.unshift(String((i-1)*step)+"°");
+			}
+			labels.unshift(labels.pop());
+		}
+	}
 };
 
 function DriveTurn(answer, socketBundle){
@@ -178,8 +202,8 @@ function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
 		getDistances(item);
-		driveTurn(item, -90);
-		driveStraight(item, 120);
+		//driveTurn(item, -90);
+		//driveStraight(item, 120);
 	});
 	//console.log(clients);
 };

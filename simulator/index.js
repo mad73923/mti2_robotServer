@@ -6,6 +6,18 @@ console.log("Start Robot-Simulator. Connect to localhost:"+port);
 
 var connection = net.createConnection({port: port});
 
+var uidStr = generateRandomUID();
+
+function generateRandomUID(){
+	var temp = new Buffer(1);
+	uidStr = "";
+	for(i=0; i<12; i++){
+		temp[0]=Math.round(Math.random()*255);
+		uidStr = uidStr + temp.toString('hex') + ":";
+	}
+	return uidStr.slice(0,-1);
+}
+
 connection.on('error', (er)=>{
 	console.log("Couldn't establish connection to Server.\nDid you start the server?\n"+er);
 });
@@ -25,13 +37,17 @@ connection.on('data', (dataIn) =>{
 function handleCommand(dataIn){
 	var dataInStr = String(dataIn);
 	if(dataIn=="GetUID?"){
-		connection.write("UID=11:22:33:44:55:66:77:88:99:AA:BB:CC");
+		connection.write("UID="+uidStr);
 	}
 	if(dataIn=="GetPos?"){
 		connection.write("ActPos=[3202,1704,68]")
 	}
 	if(dataIn=="GetDistances?"){
-		connection.write("ActDistances=[150,342,242,324,213,4,2,35,23]")
+		var ret = [];
+		for(i=0; i<36; i++){
+			ret.push(Math.round(Math.random()*20));
+		}
+		connection.write("ActDistances=["+ret+"]");
 	}
 	if(dataInStr.match(/DriveTurn![-]?\d+/)!=null){
 		connection.write("DriveTurn=OK");

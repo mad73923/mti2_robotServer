@@ -1,9 +1,16 @@
-var dataApp = angular.module('dataApp', []);
+var dataApp = angular.module('dataApp', ['chart.js']);
 
 dataApp.controller('dataCtrl', function($scope, $http){
+	updateClients($scope, $http);
 	setInterval(()=>{
 		updateClients($scope, $http);
 	}, 500);
+
+	$scope.currentItemIndex = -1;
+
+	$scope.setTempItemIndex = function(index){
+		$scope.currentItemIndex = index;
+	};
 });
 
 function updateClients($scope, $http){

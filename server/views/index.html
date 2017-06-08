@@ -5,17 +5,42 @@
 <title>Mission Control</title>
 <script src="/node_modules/angular/angular.js"></script>
 <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+<script src="/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="/node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
 <script src="UIscript.js"></script>
 </head>
-<body ng-Controller="dataCtrl">
+<body >
 	<div>
 	<br/>
 		<div class="panel panel-default">
 		  <div class="panel-body">
-		    <h3>Basic panel example</h3>
+		    <h3>Mission Control</h3>
 		  </div>
 		</div>
-		  {{clients}}
+		<div ng-Controller="dataCtrl">
+			<ul class="nav nav-tabs">
+				<li><a href="#home" ng-click="setTempItemIndex(-1)">Home</a></li>
+				<li ng-repeat="client in clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
+			</ul>
+			<div id="{{currentItemIndex}}" class="tab-content"  ng-show="currentItemIndex!=-1">
+				<div class="tab-pane active" role="tabpanel">
+					Client data:{{clients[currentItemIndex]}}<br/>
+					<div class="col-lg-3 col-sm-6" id="radar-chart">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Radar</div>
+                            <div class="panel-body">
+								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels" chart-colors="colors"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="home" ng-show="currentItemIndex==-1">
+				{{clients.length}} Clients connected<br/>
+				Raw data:<br/>
+				{{clients}}
+			</div>
+		</div>
 	</div>
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
