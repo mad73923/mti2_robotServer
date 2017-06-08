@@ -14,17 +14,30 @@
 	<br/>
 		<div class="panel panel-default">
 		  <div class="panel-body">
-		    <h3>Basic panel example</h3>
+		    <h3>Mission Control</h3>
 		  </div>
 		</div>
 		<div ng-Controller="dataCtrl">
-			{{clients}}
-		</div>
-		<div class="col-lg-6 col-sm-12" id="radar-chart" ng-Controller="radarCtrl">
-			<div class="panel panel-default">
-				<div class="panel-heading">Radar</div>
-				<div class="panel-body">
-					<canvas id="radar" class="chart chart-radar" chart-data="chart.data" chart-labels="chart.labels" ng-show="true"></canvas>
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+				<li ng-repeat="client in clients"><a href="#{{$index}}" data-toggle="tab">{{client.uid}}</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="home" class="tab-pane fade in active">
+					{{clients.length}} Clients connected<br/>
+					Raw data:<br/>
+					{{clients}}
+				</div>
+				<div ng-repeat="client in clients" class="tab-pane fade" id="{{$index}}">
+					{{client.uid}}
+					<div class="col-lg-3 col-sm-6" id="radar-chart">
+						<div class="panel panel-default">
+							<div class="panel-heading">Radar</div>
+							<div class="panel-body">
+								<canvas id="radar" class="chart chart-radar" chart-data="chart.data" chart-labels="chart.labels"></canvas>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -116,11 +116,21 @@ function unexpectedAnswer(answer, socketBundle){
 };
 
 function ActPos(answer, socketBundle){
-	socketBundle.data.pos = String(answer);
+	var strAnswer = String(answer);
+	var validAnswer = /ActPos=\[\d+(,\d+)*\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.pos = JSON.parse(strAnswer);
+	}
 };
 
 function ActDistances(answer, socketBundle){
-	socketBundle.data.distances = String(answer);
+	var strAnswer = String(answer);
+	var validAnswer = /ActDistances=\[\d+(,\d+)*\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.distances = JSON.parse(strAnswer);
+	}
 };
 
 function DriveTurn(answer, socketBundle){

@@ -1,8 +1,20 @@
 var dataApp = angular.module('dataApp', ['chart.js']);
 
 dataApp.controller('dataCtrl', function($scope, $http){
+	updateClients($scope, $http);
 	setInterval(()=>{
 		updateClients($scope, $http);
+	}, 10000);
+
+	$scope.chart = {};
+	$scope.chart.labels = [];
+	$scope.chart.data = [];
+	for(i=1; i<=36; i++){
+		$scope.chart.labels.push(String((i-1)*10)+"°");
+		$scope.chart.data.push(Math.random()*20);
+	}
+	setInterval(()=>{
+		randomRadar($scope);
 	}, 500);
 });
 
@@ -12,12 +24,8 @@ function updateClients($scope, $http){
 	});
 };
 
-dataApp.controller('radarCtrl', function($scope){
-	$scope.chart = {};
-	$scope.chart.labels = [];
-	$scope.chart.data = [];
+function randomRadar($scope){
 	for(i=1; i<=36; i++){
-		$scope.chart.labels.push(String((i-1)*10)+"°");
-		$scope.chart.data.push(Math.random()*20);
+		$scope.chart.data[i-1] = Math.random()*20;
 	}
-});
+}
