@@ -75,7 +75,11 @@ function createNewClient(socket, uid){
 			commandQueue: 	[],
 			answerQueue: 	[],
 			uid: 			uid,
-			data: 			{}
+			data: 			{
+				radar: 			{
+					labels: 		[]
+				}
+			}
 		});
 }
 
@@ -129,7 +133,15 @@ function ActDistances(answer, socketBundle){
 	var validAnswer = /ActDistances=\[\d+(,\d+)*\]/
 	if(strAnswer.match(validAnswer)!=null){
 		strAnswer = strAnswer.split("=")[1];
-		socketBundle.data.distances = JSON.parse(strAnswer);
+		socketBundle.data.radar.distances = JSON.parse(strAnswer);
+		if(socketBundle.data.radar.distances.length != socketBundle.data.radar.labels.length){
+			socketBundle.data.radar.labels = [];
+			var len = socketBundle.data.radar.distances.length;
+			var step = 360/len;
+			for(i=1; i<=len; i++){
+			socketBundle.data.radar.labels.push(String((i-1)*step)+"°");
+		}
+		}
 	}
 };
 

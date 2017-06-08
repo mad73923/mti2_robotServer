@@ -8,10 +8,6 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	$scope.currentItemIndex = -1;
 
-	setInterval(()=>{
-		randomRadar($scope);
-	}, 500);
-
 	$scope.setTempItemIndex = function(index){
 		$scope.currentItemIndex = index;
 	};
