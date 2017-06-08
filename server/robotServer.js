@@ -108,6 +108,7 @@ function deleteClientIfExists(socket){
 	if(index != -1){
 		console.log("Deleted client UID:"+clients[index].uid);
 		clients.splice(index,1);
+		exports.emitter.emit('newData');
 	}
 }
 
@@ -117,6 +118,7 @@ function deleteIfUIDAlreadyExists(uid){
 		console.log("Delete old client with same UID");
 		clients[index].socket.destroy();
 		clients.splice(index,1);
+		exports.emitter.emit('newData');
 	}
 }
 
@@ -140,6 +142,7 @@ function checkValidClient(answer, socket){
 		var strUID = strAnswer.split("=")[1];
 		deleteIfUIDAlreadyExists(strUID);
 		createNewClient(socket, strUID);
+		exports.emitter.emit('newData');
 	}else{
 		console.log("Client not valid!");
 		socket.end();
