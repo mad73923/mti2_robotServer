@@ -144,6 +144,8 @@ function ActDistances(answer, socketBundle){
 			}
 			labels.unshift(labels.pop());
 		}
+	}else{
+		console.log(strAnswer);
 	}
 };
 
