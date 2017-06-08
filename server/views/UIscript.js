@@ -18,3 +18,7 @@ function updateClients($scope, $http){
 		$scope.clients = data.data;
 	});
 };
+
+// socket.io
+
+var socket = io();
