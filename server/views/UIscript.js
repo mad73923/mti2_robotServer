@@ -10,6 +10,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	socket.on('message', function(data){
 		$scope.clients = data;
+		$scope.$apply();
 	});
 
 	$scope.setTempItemIndex = function(index){

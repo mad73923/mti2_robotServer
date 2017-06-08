@@ -209,6 +209,7 @@ function answActPos(answer, socketBundle){
 	if(strAnswer.match(validAnswer)!=null){
 		strAnswer = strAnswer.split("=")[1];
 		socketBundle.data.pos = JSON.parse(strAnswer);
+		exports.emitter.emit('newData');
 	}else{
 		wrongFormat(socketBundle, answer, validAnswer);
 	}
