@@ -24,12 +24,12 @@
 			</ul>
 			<div id="{{currentItemIndex}}" class="tab-content"  ng-show="currentItemIndex!=-1">
 				<div class="tab-pane active" role="tabpanel">
-					{{currentItemIndex}}
+					Client data:{{clients[currentItemIndex]}}<br/>
 					<div class="col-lg-3 col-sm-6" id="radar-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">Radar</div>
                             <div class="panel-body">
-								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels"></canvas>
+								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels" chart-colors="colors"></canvas>
 							</div>
 						</div>
 					</div>

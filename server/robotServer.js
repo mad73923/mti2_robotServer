@@ -136,11 +136,13 @@ function ActDistances(answer, socketBundle){
 		socketBundle.data.radar.distances = JSON.parse(strAnswer);
 		if(socketBundle.data.radar.distances.length != socketBundle.data.radar.labels.length){
 			socketBundle.data.radar.labels = [];
+			labels = socketBundle.data.radar.labels;
 			var len = socketBundle.data.radar.distances.length;
 			var step = 360/len;
 			for(i=1; i<=len; i++){
-			socketBundle.data.radar.labels.push(String((i-1)*step)+"°");
-		}
+				labels.unshift(String((i-1)*step)+"°");
+			}
+			labels.unshift(labels.pop());
 		}
 	}
 };
@@ -200,8 +202,8 @@ function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
 		getDistances(item);
-		driveTurn(item, -90);
-		driveStraight(item, 120);
+		//driveTurn(item, -90);
+		//driveStraight(item, 120);
 	});
 	//console.log(clients);
 };
