@@ -75,8 +75,7 @@ function connectionListener(socket){
 // Clients
 
 function findUID(element, index, array){
-	console.log(element.uid+"=?"+this);
-	return element.uid === this;
+	return element.uid.equals(this);
 }
 
 function createNewClient(socket, uid){
@@ -103,7 +102,6 @@ function deleteClientIfExists(socket){
 
 function deleteIfUIDAlreadyExists(uid){
 	var index = clients.findIndex(findUID, uid);
-	console.log("in delete function index:"+index);
 	if(index != -1){
 		console.log("Delete old client with same UID");
 		clients[index].socket.destroy();
