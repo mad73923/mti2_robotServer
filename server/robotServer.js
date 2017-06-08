@@ -75,7 +75,7 @@ function connectionListener(socket){
 // Clients
 
 function findUID(element, index, array){
-	return String(element.uid).equals(String(this));
+	return element.uid == this;
 }
 
 function createNewClient(socket, uid){
