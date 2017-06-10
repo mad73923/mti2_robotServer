@@ -40,7 +40,12 @@ function handleCommand(dataIn){
 		connection.write("UID="+uidStr);
 	}
 	if(dataIn=="GetPos?"){
-		connection.write("ActPos=[3202,1704,68]")
+		var answ = "ActPos=[";
+		for(i=0; i<2; i++){
+			answ += String(Math.round(Math.random()*20))+",";
+		}
+		answ += String(Math.random()*360)+"]";
+		connection.write(answ);
 	}
 	if(dataIn=="GetDistances?"){
 		var ret = [];
