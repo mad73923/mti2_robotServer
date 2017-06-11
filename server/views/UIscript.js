@@ -13,6 +13,12 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		$scope.$apply();
 	});
 
+	$scope.radarOptions = {
+	    scale: {
+			ticks:{beginAtZero:true}
+	    }
+	};
+
 	$scope.setTempItemIndex = function(index){
 		$scope.currentItemIndex = index;
 	};

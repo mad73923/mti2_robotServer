@@ -50,7 +50,7 @@ function handleCommand(dataIn){
 	if(dataIn=="GetDistances?"){
 		var ret = [];
 		for(i=0; i<36; i++){
-			ret.push(Math.round(Math.random()*20));
+			ret.push(Math.round(Math.random()*20)+20);
 		}
 		connection.write("ActDistances=["+ret+"]");
 	}
