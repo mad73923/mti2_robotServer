@@ -15,7 +15,9 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	$scope.radarOptions = {
 	    scale: {
-			ticks:{beginAtZero:true}
+			ticks:{
+				beginAtZero:true
+			}
 	    }
 	};
 
