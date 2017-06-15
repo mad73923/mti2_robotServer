@@ -60,7 +60,7 @@ function findSocket(element, index, array){
 
 function connectionListener(socket){
 	console.log("New client connected, checking validity...");
-	socket.write("GetUID?");
+	socket.write("GetUID?\n");
 
 	socket.on('data', (dataIn)=>{
 		//console.log("RX data:"+dataIn);
@@ -177,13 +177,14 @@ function queueGetter(socketBundle, command, next){
 }
 
 function queueSetter(socketBundle, command, next){
+	command = command +"\n";
 	socketBundle.answerQueue.unshift(next);
 	if(socketBundle.answerQueue.length > 1){
 		socketBundle.commandQueue.unshift(function(){
 			socketBundle.socket.write(command)
 		});
 	}else{
-		socketBundle.socket.write(command+"\n");
+		socketBundle.socket.write(command);
 	}
 }
 

@@ -36,10 +36,11 @@ connection.on('data', (dataIn) =>{
 
 function handleCommand(dataIn){
 	var dataInStr = String(dataIn);
-	if(dataIn=="GetUID?"){
+	dataInStr = dataInStr.split('\n')[0];
+	if(dataInStr=="GetUID?"){
 		connection.write("UID="+uidStr);
 	}
-	if(dataIn=="GetPos?"){
+	if(dataInStr=="GetPos?"){
 		var answ = "ActPos=[";
 		for(i=0; i<2; i++){
 			answ += String(Math.round(Math.random()*20))+",";
@@ -47,7 +48,7 @@ function handleCommand(dataIn){
 		answ += String(Math.random()*360)+"]";
 		connection.write(answ);
 	}
-	if(dataIn=="GetDistances?"){
+	if(dataInStr=="GetDistances?"){
 		var ret = [];
 		for(i=0; i<36; i++){
 			ret.push(Math.round(Math.random()*20)+20);
