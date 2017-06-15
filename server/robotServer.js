@@ -183,7 +183,7 @@ function queueSetter(socketBundle, command, next){
 			socketBundle.socket.write(command)
 		});
 	}else{
-		socketBundle.socket.write(command);
+		socketBundle.socket.write(command+"\n");
 	}
 }
 
