@@ -8,6 +8,7 @@ Packages needed:
 
 *	npm
 * 	node.js
+*   nodejs (optional, if npm start throws an error)
 
 First add new installation source 
 ```
