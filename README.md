@@ -8,7 +8,7 @@ Packages needed:
 
 *	npm
 * 	node.js
-*   nodejs (optional, if npm start throws an error)
+*   nodejs (optional, if npm start throws an error due to missing packages)
 
 First add new installation source 
 ```
