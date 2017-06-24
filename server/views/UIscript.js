@@ -1,9 +1,9 @@
 var dataApp = angular.module('dataApp', ['chart.js']);
 
 dataApp.controller('dataCtrl', function($scope, $http){
-	updateClients();
 	$scope.currentItemIndex = -1;
 	$scope.clients = [];
+	updateClients();
 
 	// socket.io
 
@@ -38,5 +38,44 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		if(oldLength != $scope.clients.length){
 			$scope.currentItemIndex = -1;
 		}
+	};
+
+
+	// Control
+	// up, left, down, right
+	let keyPressed = [0,0,0,0];
+	let keyPressedOld = [0,0,0,0];
+
+	$scope.keyDown = function(event){
+		if(event.key == "ArrowUp"){
+			keyPressed[0] = 1;
+		}else if(event.key == "ArrowLeft"){
+			keyPressed[1] = 1;
+		}else if(event.key == "ArrowDown"){
+			keyPressed[2] = 1;
+		}else if(event.key == "ArrowRight"){
+			keyPressed[3] = 1;
+		}
+		checkKeysForChanges();
+	};
+
+	$scope.keyUp = function(event){
+		if(event.key == "ArrowUp"){
+			keyPressed[0] = 0;
+		}else if(event.key == "ArrowLeft"){
+			keyPressed[1] = 0;
+		}else if(event.key == "ArrowDown"){
+			keyPressed[2] = 0;
+		}else if(event.key == "ArrowRight"){
+			keyPressed[3] = 0;
+		}
+		checkKeysForChanges();
+	};
+
+	function checkKeysForChanges(){
+		if(keyPressed[0] != keyPressedOld[0] || keyPressed[1] != keyPressedOld[1] || keyPressed[2] != keyPressedOld[2] || keyPressed[3] != keyPressedOld[3]){
+			
+		}
+		keyPressedOld = keyPressed.slice(0);
 	};
 });

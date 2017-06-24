@@ -10,7 +10,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="UIscript.js"></script>
 </head>
-<body >
+<body ng-Controller="dataCtrl" ng-keyup="keyUp($event)" ng-keydown="keyDown($event)">
 	<div>
 	<br/>
 		<div class="panel panel-default">
@@ -18,7 +18,7 @@
 		    <h3>Mission Control</h3>
 		  </div>
 		</div>
-		<div ng-Controller="dataCtrl">
+		<div>
 			<ul class="nav nav-tabs">
 				<li><a href="#home" ng-click="setTempItemIndex(-1)">Home</a></li>
 				<li ng-repeat="client in clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
