@@ -10,6 +10,11 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     //console.log('io: user disconnected');
   });
+
+  socket.on('robotCommand', function(index){
+  	console.log("UI Server:"+index)
+  	//robotServer.command(command, index, args);
+  });
 });
 
 var path = __dirname + '/views/';

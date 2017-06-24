@@ -74,7 +74,35 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	function checkKeysForChanges(){
 		if(keyPressed[0] != keyPressedOld[0] || keyPressed[1] != keyPressedOld[1] || keyPressed[2] != keyPressedOld[2] || keyPressed[3] != keyPressedOld[3]){
-			
+			socket.emit('robotCommand', $scope.currentItemIndex);
+			let arraySum = keyPressed.reduce(function (a, b) {
+				return a + b;
+				}, 0);
+			if(arraySum == 0 || arraySum > 2){
+				console.log("[0,0]");
+			}else if(arraySum ==1){
+				if(keyPressed[0]){
+					console.log("[1500,1500]");
+				}else if(keyPressed[1]){
+					console.log("[0,1500]");
+				}else if(keyPressed[2]){
+					console.log("[-1500,-1500]");
+				}else if(keyPressed[3]){
+					console.log("[1500,0]");
+				}
+			}else{
+				if(keyPressed[0] && keyPressed[1]){
+					console.log("[750,1500]");
+				}else if(keyPressed[1] && keyPressed[2]){
+					console.log("[-750,-1500]");
+				}else if(keyPressed[2] && keyPressed[3]){
+					console.log("[-1500,-750]");
+				}else if(keyPressed[0] && keyPressed[3]){
+					console.log("[1500,750]");
+				}else{
+					console.log("[0,0]");
+				}
+			}
 		}
 		keyPressedOld = keyPressed.slice(0);
 	};
