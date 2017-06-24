@@ -34,6 +34,39 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-lg-3 col-sm-6" id="odometry">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Odometry</div>
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th class="col-md-5"> Parameter </th>
+                            <th> Value </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td>Position X:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[0]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Position Y:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[1]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Theta:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[2]}}°</td>
+                            	</tr>
+                            </tbody>
+                            </table>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6" id="motor">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Motor</div>
+                            
+						</div>
+					</div>
 				</div>
 			</div>
 			<div id="home" ng-show="currentItemIndex==-1">
