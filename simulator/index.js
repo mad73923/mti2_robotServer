@@ -43,7 +43,7 @@ connection.on('data', (dataIn) =>{
 function handleCommand(dataIn){
 	var dataInStr = String(dataIn);
 	dataInStr = dataInStr.split('\n')[0];
-	console.log(dataInStr);
+	//console.log(dataInStr);
 	if(dataInStr=="GetUID?"){
 		connection.write("UID="+uidStr);
 	}
