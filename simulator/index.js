@@ -18,6 +18,12 @@ function generateRandomUID(){
 	return uidStr.slice(0,-1);
 }
 
+// Robot parameters
+
+var maxThrottle = 2000;
+var throttle = [0,0];
+var position = [0,0];
+
 connection.on('error', (er)=>{
 	console.log("Couldn't establish connection to Server.\nDid you start the server?\n"+er);
 });
@@ -61,4 +67,22 @@ function handleCommand(dataIn){
 	if(dataInStr.match(/DriveStraight![-]?\d+/)!=null){
 		connection.write("DriveStraight=OK");
 	}
+	if(dataInStr.match(/SetThrottle!\[\d+,\d+\]/)!=null){
+		console.log(dataInStr);
+		values = JSON.parse(dataInStr.split("!")[1]);
+		values[0] = plusMinusMax(values[0], maxThrottle);
+		values[1] = plusMinusMax(values[1], maxThrottle);
+		throttle = values;
+		connection.write("SetThrottle="+values);
+	}
 };
+
+function plusMinusMax(value, maxAbsValue){
+	if(value > maxAbsValue){
+		return maxAbsValue;
+	}else if(value < -maxAbsValue){
+		return -maxAbsValue;
+	}else{
+		return value;
+	}
+}

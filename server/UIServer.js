@@ -11,9 +11,8 @@ io.on('connection', function(socket){
     //console.log('io: user disconnected');
   });
 
-  socket.on('robotCommand', function(index){
-  	console.log("UI Server:"+index)
-  	//robotServer.command(command, index, args);
+  socket.on('robotSetThrottle', (index, values) => {
+  	robotServer.emitter.emit('newCommand');
   });
 });
 

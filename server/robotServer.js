@@ -46,6 +46,10 @@ exports.getClientData = function(){
 
 exports.emitter = new RobotServerEmitter();
 
+exports.emitter.on('newCommand',()=>{
+		console.log("RS: new command");
+	});
+
 // Intervall function
 
 var timer = setInterval(()=>{
@@ -264,3 +268,11 @@ function driveStraight(socketBundle, value){
 function answDriveStraight(answer, socketBundle){
 
 };
+
+function setThrottle(socketBundle, value){
+	queueSetter(socketBundle, "SetThrottle!"+String(value), answSetThrottle);
+}
+
+function answSetThrottle(answer, socketBundle){
+
+}

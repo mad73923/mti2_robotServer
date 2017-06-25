@@ -45,6 +45,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	// up, left, down, right
 	let keyPressed = [0,0,0,0];
 	let keyPressedOld = [0,0,0,0];
+	let fullThrottle = 1500;
 
 	$scope.keyDown = function(event){
 		if(event.key == "ArrowUp"){
@@ -73,35 +74,38 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	};
 
 	function checkKeysForChanges(){
+		let throttle = [0,0];
 		if(keyPressed[0] != keyPressedOld[0] || keyPressed[1] != keyPressedOld[1] || keyPressed[2] != keyPressedOld[2] || keyPressed[3] != keyPressedOld[3]){
-			socket.emit('robotCommand', $scope.currentItemIndex);
 			let arraySum = keyPressed.reduce(function (a, b) {
 				return a + b;
 				}, 0);
 			if(arraySum == 0 || arraySum > 2){
-				console.log("[0,0]");
+				throttle = [0,0];
 			}else if(arraySum ==1){
 				if(keyPressed[0]){
-					console.log("[1500,1500]");
+					throttle = [fullThrottle,fullThrottle];
 				}else if(keyPressed[1]){
-					console.log("[0,1500]");
+					throttle = [0,fullThrottle];
 				}else if(keyPressed[2]){
-					console.log("[-1500,-1500]");
+					throttle = [-fullThrottle,-fullThrottle];
 				}else if(keyPressed[3]){
-					console.log("[1500,0]");
+					throttle = [fullThrottle,0];
 				}
 			}else{
 				if(keyPressed[0] && keyPressed[1]){
-					console.log("[750,1500]");
+					throttle = [Math.round(fullThrottle/2),fullThrottle];
 				}else if(keyPressed[1] && keyPressed[2]){
-					console.log("[-750,-1500]");
+					throttle = [-Math.round(fullThrottle/2),-fullThrottle];
 				}else if(keyPressed[2] && keyPressed[3]){
-					console.log("[-1500,-750]");
+					throttle = [-fullThrottle,-Math.round(fullThrottle/2)];
 				}else if(keyPressed[0] && keyPressed[3]){
-					console.log("[1500,750]");
+					throttle = [fullThrottle,Math.round(fullThrottle/2)];
 				}else{
-					console.log("[0,0]");
+					throttle = [0,0];
 				}
+			}
+			if($scope.currentItemIndex > -1){
+			socket.emit('robotSetThrottle', $scope.currentItemIndex, throttle);
 			}
 		}
 		keyPressedOld = keyPressed.slice(0);
