@@ -64,7 +64,24 @@
 					<div class="col-lg-3 col-sm-6" id="motor">
                         <div class="panel panel-default">
                             <div class="panel-heading">Motor</div>
-                            
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th class="col-md-5"> Parameter </th>
+                            <th> Value </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td>Throttle left:</td>
+                            	<td>{{clients[currentItemIndex].data.motor[0]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Throttle right:</td>
+                            	<td>{{clients[currentItemIndex].data.motor[1]}}</td>
+                            	</tr>
+                            </tbody>
+                            </table>
 						</div>
 					</div>
 				</div>

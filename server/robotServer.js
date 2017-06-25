@@ -46,8 +46,8 @@ exports.getClientData = function(){
 
 exports.emitter = new RobotServerEmitter();
 
-exports.emitter.on('newCommand',()=>{
-		console.log("RS: new command");
+exports.emitter.on('newCommand',(command, index, values)=>{
+		UICommandHandler(command, index, values);
 	});
 
 // Intervall function
@@ -270,9 +270,25 @@ function answDriveStraight(answer, socketBundle){
 };
 
 function setThrottle(socketBundle, value){
-	queueSetter(socketBundle, "SetThrottle!"+String(value), answSetThrottle);
+	queueSetter(socketBundle, "SetThrottle!"+JSON.stringify(value), answSetThrottle);
 }
 
 function answSetThrottle(answer, socketBundle){
+	var strAnswer = String(answer);
+	var validAnswer = /SetThrottle=\[-?\d+,-?\d+\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.motor = JSON.parse(strAnswer);
+		exports.emitter.emit('newData');
+	}else{
+		wrongFormat(socketBundle, answer, validAnswer);
+	}
+}
 
+// HANDLER
+
+function UICommandHandler(command, index, values){
+	if(String(command) == "setThrottle"){
+		setThrottle(clients[index], values);
+	}
 }

@@ -105,7 +105,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				}
 			}
 			if($scope.currentItemIndex > -1){
-			socket.emit('robotSetThrottle', $scope.currentItemIndex, throttle);
+			socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
 			}
 		}
 		keyPressedOld = keyPressed.slice(0);

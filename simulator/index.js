@@ -37,12 +37,13 @@ connection.on('end', ()=>{
 });
 
 connection.on('data', (dataIn) =>{
-	setTimeout(handleCommand, Math.random()*500, dataIn);
+	setTimeout(handleCommand, Math.random()*100, dataIn);
 });
 
 function handleCommand(dataIn){
 	var dataInStr = String(dataIn);
 	dataInStr = dataInStr.split('\n')[0];
+	console.log(dataInStr);
 	if(dataInStr=="GetUID?"){
 		connection.write("UID="+uidStr);
 	}
@@ -67,13 +68,12 @@ function handleCommand(dataIn){
 	if(dataInStr.match(/DriveStraight![-]?\d+/)!=null){
 		connection.write("DriveStraight=OK");
 	}
-	if(dataInStr.match(/SetThrottle!\[\d+,\d+\]/)!=null){
-		console.log(dataInStr);
+	if(dataInStr.match(/SetThrottle!\[-?\d+,-?\d+\]/)!=null){
 		values = JSON.parse(dataInStr.split("!")[1]);
 		values[0] = plusMinusMax(values[0], maxThrottle);
 		values[1] = plusMinusMax(values[1], maxThrottle);
 		throttle = values;
-		connection.write("SetThrottle="+values);
+		connection.write("SetThrottle="+JSON.stringify(values));
 	}
 };
 
