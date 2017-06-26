@@ -18,11 +18,15 @@ function generateRandomUID(){
 	return uidStr.slice(0,-1);
 }
 
+var timer = setInterval(()=>{
+	updatePosition();
+}, 10);
+
 // Robot parameters
 
 var maxThrottle = 2000;
 var throttle = [0,0];
-var position = [0,0];
+var position = [0,0,Math.PI/2];
 
 connection.on('error', (er)=>{
 	console.log("Couldn't establish connection to Server.\nDid you start the server?\n"+er);
@@ -48,11 +52,12 @@ function handleCommand(dataIn){
 		connection.write("UID="+uidStr);
 	}
 	if(dataInStr=="GetPos?"){
-		var answ = "ActPos=[";
-		for(i=0; i<2; i++){
-			answ += String(Math.round(Math.random()*20))+",";
-		}
-		answ += String(Math.random()*360)+"]";
+		var posPrec = [0,0,0];
+		var precision = 100000000;
+		posPrec[0] = Math.round(position[0]*precision)/precision;
+		posPrec[1] = Math.round(position[1]*precision)/precision;
+		posPrec[2] = Math.round(position[2]*precision)/precision;
+		var answ = "ActPos="+JSON.stringify(posPrec);
 		connection.write(answ);
 	}
 	if(dataInStr=="GetDistances?"){
@@ -84,5 +89,45 @@ function plusMinusMax(value, maxAbsValue){
 		return -maxAbsValue;
 	}else{
 		return value;
+	}
+}
+
+function updatePosition(){
+	var halfAxialLength = 70;
+	var dividerS = 20000;
+
+	// left wheel
+	var deltaS = -throttle[0]/dividerS;
+	var alpha_rad = deltaS/(halfAxialLength*2);
+	var deltaX = -(halfAxialLength - (Math.cos(alpha_rad)*halfAxialLength));
+	var deltaY = Math.sin(alpha_rad)*halfAxialLength;
+	var cSlash = Math.tan(alpha_rad)*halfAxialLength;
+	var deltaTheta_rad = -(Math.atan2(halfAxialLength, cSlash));
+	if(alpha_rad >= Math.PI || alpha_rad <= -Math.PI){
+		deltaTheta_rad += Math.PI;
+	}
+	var deltaXLeft_global = -Math.sin(position[2])*deltaX+Math.cos(position[2])*deltaY;
+	var deltaYLeft_global = Math.cos(position[2])*deltaX-Math.sin(position[2])*deltaY;
+
+	// right wheel
+	deltaS = -throttle[1]/dividerS;
+	alpha_rad = deltaS/(halfAxialLength*2);
+	deltaX = halfAxialLength - (Math.cos(alpha_rad)*halfAxialLength);
+	deltaY = Math.sin(alpha_rad)*halfAxialLength;
+	cSlash = Math.tan(alpha_rad)*halfAxialLength;
+	deltaTheta_rad += Math.atan2(halfAxialLength, cSlash);
+	if(alpha_rad >= Math.PI || alpha_rad <= -Math.PI){
+		deltaTheta_rad += Math.PI;
+	}
+	var deltaXRight_global = -Math.sin(position[2])*deltaX+Math.cos(position[2])*deltaY;
+	var deltaYRight_global = Math.cos(position[2])*deltaX-Math.sin(position[2])*deltaY;
+
+	position[0] -= deltaXLeft_global+deltaXRight_global;
+	position[1] += deltaYLeft_global+deltaYRight_global;
+	position[2] += deltaTheta_rad;
+	if(position[2]< -Math.PI){
+		position[2] += 2* Math.PI;
+	}else if(position[2]>Math.PI){
+		position[2] -= 2* Math.PI;
 	}
 }

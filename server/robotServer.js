@@ -213,7 +213,7 @@ function getPos(socketBundle){
 
 function answActPos(answer, socketBundle){
 	var strAnswer = String(answer);
-	var validAnswer = /ActPos=\[(\d+,){2}[+-]?\d*\.?\d*\]/
+	var validAnswer = /ActPos=\[([+-]?\d*\.?\d*,){2}[+-]?\d*\.?\d*\]/
 	if(strAnswer.match(validAnswer)!=null){
 		strAnswer = strAnswer.split("=")[1];
 		socketBundle.data.pos = JSON.parse(strAnswer);

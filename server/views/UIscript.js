@@ -5,6 +5,8 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	$scope.clients = [];
 	updateClients();
 
+	$scope.Math = window.Math;
+
 	// socket.io
 
 	var socket = io();
