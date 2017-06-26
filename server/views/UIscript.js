@@ -87,11 +87,11 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				if(keyPressed[0]){
 					throttle = [fullThrottle,fullThrottle];
 				}else if(keyPressed[1]){
-					throttle = [0,fullThrottle];
+					throttle = [-fullThrottle,fullThrottle];
 				}else if(keyPressed[2]){
 					throttle = [-fullThrottle,-fullThrottle];
 				}else if(keyPressed[3]){
-					throttle = [fullThrottle,0];
+					throttle = [fullThrottle,-fullThrottle];
 				}
 			}else{
 				if(keyPressed[0] && keyPressed[1]){
