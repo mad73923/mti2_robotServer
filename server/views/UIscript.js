@@ -1,8 +1,15 @@
 var dataApp = angular.module('dataApp', ['chart.js']);
 
 dataApp.controller('dataCtrl', function($scope, $http){
+	// Control
+	// up, left, down, right
+	let keyPressed = [0,0,0,0];
+	let keyPressedOld = [0,0,0,0];
+	let fullThrottle = 1500;
+	
 	$scope.currentItemIndex = -1;
 	$scope.clients = [];
+	$scope.manualThrottle = fullThrottle;
 	updateClients();
 
 	$scope.Math = window.Math;
@@ -28,7 +35,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		$scope.currentItemIndex = index;
 	};
 
-	$scope.resetPosition = function(index){
+	$scope.resetPosition = function(){
 		if($scope.currentItemIndex > -1){
 			socket.emit('robotCommand', "setPosition", $scope.currentItemIndex, [0,0,Math.PI/2]);
 		}
@@ -48,12 +55,9 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		}
 	};
 
-
-	// Control
-	// up, left, down, right
-	let keyPressed = [0,0,0,0];
-	let keyPressedOld = [0,0,0,0];
-	let fullThrottle = 1500;
+	$scope.setThrottle = function(throttle){
+		socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
+	};
 
 	$scope.keyDown = function(event){
 		if(event.key == "ArrowUp"){
@@ -113,7 +117,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				}
 			}
 			if($scope.currentItemIndex > -1){
-			socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
+				$scope.setThrottle(throttle);
 			}
 		}
 		keyPressedOld = keyPressed.slice(0);

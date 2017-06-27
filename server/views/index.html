@@ -60,7 +60,7 @@
                             </tbody>
                             </table>
                             <div class="panel-body">
-                            	<button class="btn btn-default btn-lg" type="button" ng-click="resetPosition(currentItemIndex)"> Reset </button>
+                            	<button class="btn btn-warning btn-lg" type="button" ng-click="resetPosition()"> Reset </button>
                             </div>
 						</div>
 					</div>
@@ -82,6 +82,35 @@
                             	<tr>
                             	<td>Throttle right:</td>
                             	<td>{{clients[currentItemIndex].data.motor[1]}}</td>
+                            	</tr>
+                            </tbody>
+                            </table>
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th colspan="3">Manual control</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,manualThrottle])">
+  <span class="glyphicon glyphicon-menu-up"></span></button></td>
+                            	<td></td>
+                            	</tr>
+                            	<tr>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,manualThrottle])">
+  <span class="glyphicon glyphicon-menu-left"></span></button></td>
+                            	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="setThrottle([0,0])">
+  <span class="glyphicon glyphicon-stop"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,-manualThrottle])">
+  <span class="glyphicon glyphicon-menu-right"></span></button></td>
+                            	</tr>
+                            	<tr>
+                            	<td></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,-manualThrottle])">
+  <span class="glyphicon glyphicon-menu-down"></span></button></td>
+                            	<td></td>
                             	</tr>
                             </tbody>
                             </table>
