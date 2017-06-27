@@ -95,13 +95,13 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				}
 			}else{
 				if(keyPressed[0] && keyPressed[1]){
-					throttle = [Math.round(fullThrottle/2),fullThrottle];
+					throttle = [0,fullThrottle];
 				}else if(keyPressed[1] && keyPressed[2]){
-					throttle = [-Math.round(fullThrottle/2),-fullThrottle];
+					throttle = [0,-fullThrottle];
 				}else if(keyPressed[2] && keyPressed[3]){
-					throttle = [-fullThrottle,-Math.round(fullThrottle/2)];
+					throttle = [-fullThrottle,0];
 				}else if(keyPressed[0] && keyPressed[3]){
-					throttle = [fullThrottle,Math.round(fullThrottle/2)];
+					throttle = [fullThrottle,0];
 				}else{
 					throttle = [0,0];
 				}
