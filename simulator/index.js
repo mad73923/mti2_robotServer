@@ -30,6 +30,7 @@ var position = [0,0,Math.PI/2];
 
 connection.on('error', (er)=>{
 	console.log("Couldn't establish connection to Server.\nDid you start the server?\n"+er);
+	process.exit();
 });
 
 connection.on('connect', ()=>{
@@ -38,6 +39,7 @@ connection.on('connect', ()=>{
 
 connection.on('end', ()=>{
 	console.log("Connection lost, bye!");
+	process.exit();
 });
 
 connection.on('data', (dataIn) =>{
