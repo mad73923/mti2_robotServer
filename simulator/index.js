@@ -80,6 +80,11 @@ function handleCommand(dataIn){
 		throttle = values;
 		connection.write("SetThrottle="+JSON.stringify(values));
 	}
+	if(dataInStr.match(/SetPosition!\[([+-]?\d*\.?\d*,){2}[+-]?\d*\.?\d*\]/)){
+		values = JSON.parse(dataInStr.split("!")[1]);
+		position = values;
+		connection.write("SetPosition=OK");
+	}
 };
 
 function plusMinusMax(value, maxAbsValue){

@@ -28,6 +28,12 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		$scope.currentItemIndex = index;
 	};
 
+	$scope.resetPosition = function(index){
+		if($scope.currentItemIndex > -1){
+			socket.emit('robotCommand', "setPosition", $scope.currentItemIndex, [0,0,Math.PI/2]);
+		}
+	}
+
 	function updateClients(){
 		$http.get('/clients.json').then(function(data){
 			newData(data.data);

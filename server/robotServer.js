@@ -285,10 +285,20 @@ function answSetThrottle(answer, socketBundle){
 	}
 }
 
+function setPosition(socketBundle, value){
+	queueSetter(socketBundle, "SetPosition!"+JSON.stringify(value), answSetPosition);
+}
+
+function answSetPosition(answer, socketBundle){
+
+}
+
 // HANDLER
 
 function UICommandHandler(command, index, values){
 	if(String(command) == "setThrottle"){
 		setThrottle(clients[index], values);
+	}else if(String(command) == "setPosition"){
+		setPosition(clients[index], values);
 	}
 }
