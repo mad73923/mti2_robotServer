@@ -10,7 +10,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="UIscript.js"></script>
 </head>
-<body >
+<body ng-Controller="dataCtrl" ng-keyup="keyUp($event)" ng-keydown="keyDown($event)">
 	<div>
 	<br/>
 		<div class="panel panel-default">
@@ -18,7 +18,7 @@
 		    <h3>Mission Control</h3>
 		  </div>
 		</div>
-		<div ng-Controller="dataCtrl">
+		<div>
 			<ul class="nav nav-tabs">
 				<li><a href="#home" ng-click="setTempItemIndex(-1)">Home</a></li>
 				<li ng-repeat="client in clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
@@ -32,6 +32,88 @@
                             <div class="panel-body">
 								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels" chart-options="radarOptions"></canvas>
 							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6" id="odometry">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Odometry</div>
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th class="col-md-5"> Parameter </th>
+                            <th> Value </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td>Position X:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[0]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Position Y:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[1]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Theta:</td>
+                            	<td>{{clients[currentItemIndex].data.pos[2]*(180/Math.PI)}}°</td>
+                            	</tr>
+                            </tbody>
+                            </table>
+                            <div class="panel-body">
+                            	<button class="btn btn-warning btn-lg" type="button" ng-click="resetPosition()"> Reset </button>
+                            </div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6" id="motor">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Motor</div>
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th class="col-md-5"> Parameter </th>
+                            <th> Value </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td>Throttle left:</td>
+                            	<td>{{clients[currentItemIndex].data.motor[0]}}</td>
+                            	</tr>
+                            	<tr>
+                            	<td>Throttle right:</td>
+                            	<td>{{clients[currentItemIndex].data.motor[1]}}</td>
+                            	</tr>
+                            </tbody>
+                            </table>
+                            <table class="table">
+                            <thead>
+                            <tr>
+                            <th colspan="3">Manual control</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            	<tr>
+                            	<td></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,manualThrottle])">
+  <span class="glyphicon glyphicon-menu-up"></span></button></td>
+                            	<td></td>
+                            	</tr>
+                            	<tr>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,manualThrottle])">
+  <span class="glyphicon glyphicon-menu-left"></span></button></td>
+                            	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="setThrottle([0,0])">
+  <span class="glyphicon glyphicon-stop"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,-manualThrottle])">
+  <span class="glyphicon glyphicon-menu-right"></span></button></td>
+                            	</tr>
+                            	<tr>
+                            	<td></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,-manualThrottle])">
+  <span class="glyphicon glyphicon-menu-down"></span></button></td>
+                            	<td></td>
+                            	</tr>
+                            </tbody>
+                            </table>
 						</div>
 					</div>
 				</div>

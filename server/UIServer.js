@@ -10,6 +10,10 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     //console.log('io: user disconnected');
   });
+
+  socket.on('robotCommand', (command, index, values) => {
+  	robotServer.emitter.emit('newCommand', command, index, values);
+  });
 });
 
 var path = __dirname + '/views/';

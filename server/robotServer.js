@@ -46,6 +46,10 @@ exports.getClientData = function(){
 
 exports.emitter = new RobotServerEmitter();
 
+exports.emitter.on('newCommand',(command, index, values)=>{
+		UICommandHandler(command, index, values);
+	});
+
 // Intervall function
 
 var timer = setInterval(()=>{
@@ -60,7 +64,7 @@ function findSocket(element, index, array){
 
 function connectionListener(socket){
 	console.log("New client connected, checking validity...");
-	socket.write("GetUID?");
+	socket.write("GetUID?\n");
 
 	socket.on('data', (dataIn)=>{
 		//console.log("RX data:"+dataIn);
@@ -177,6 +181,7 @@ function queueGetter(socketBundle, command, next){
 }
 
 function queueSetter(socketBundle, command, next){
+	command = command +"\n";
 	socketBundle.answerQueue.unshift(next);
 	if(socketBundle.answerQueue.length > 1){
 		socketBundle.commandQueue.unshift(function(){
@@ -208,7 +213,7 @@ function getPos(socketBundle){
 
 function answActPos(answer, socketBundle){
 	var strAnswer = String(answer);
-	var validAnswer = /ActPos=\[(\d+,){2}[+-]?\d*\.?\d*\]/
+	var validAnswer = /ActPos=\[([+-]?\d*\.?\d*,){2}[+-]?\d*\.?\d*\]/
 	if(strAnswer.match(validAnswer)!=null){
 		strAnswer = strAnswer.split("=")[1];
 		socketBundle.data.pos = JSON.parse(strAnswer);
@@ -263,3 +268,37 @@ function driveStraight(socketBundle, value){
 function answDriveStraight(answer, socketBundle){
 
 };
+
+function setThrottle(socketBundle, value){
+	queueSetter(socketBundle, "SetThrottle!"+JSON.stringify(value), answSetThrottle);
+}
+
+function answSetThrottle(answer, socketBundle){
+	var strAnswer = String(answer);
+	var validAnswer = /SetThrottle=\[-?\d+,-?\d+\]/
+	if(strAnswer.match(validAnswer)!=null){
+		strAnswer = strAnswer.split("=")[1];
+		socketBundle.data.motor = JSON.parse(strAnswer);
+		exports.emitter.emit('newData');
+	}else{
+		wrongFormat(socketBundle, answer, validAnswer);
+	}
+}
+
+function setPosition(socketBundle, value){
+	queueSetter(socketBundle, "SetPosition!"+JSON.stringify(value), answSetPosition);
+}
+
+function answSetPosition(answer, socketBundle){
+
+}
+
+// HANDLER
+
+function UICommandHandler(command, index, values){
+	if(String(command) == "setThrottle"){
+		setThrottle(clients[index], values);
+	}else if(String(command) == "setPosition"){
+		setPosition(clients[index], values);
+	}
+}
