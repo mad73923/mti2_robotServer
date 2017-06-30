@@ -5,7 +5,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	// up, left, down, right
 	let keyPressed = [0,0,0,0];
 	let keyPressedOld = [0,0,0,0];
-	let fullThrottle = 1500;
+	let fullThrottle = 1000;
 	
 	$scope.currentItemIndex = -1;
 	$scope.clients = [];
