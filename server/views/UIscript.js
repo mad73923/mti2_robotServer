@@ -59,6 +59,10 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
 	};
 
+	$scope.setHorn = function(enable){
+		socket.emit('robotCommand', "setHorn", $scope.currentItemIndex, enable);
+	}
+
 	$scope.keyDown = function(event){
 		if(event.key == "ArrowUp"){
 			keyPressed[0] = 1;
@@ -68,6 +72,8 @@ dataApp.controller('dataCtrl', function($scope, $http){
 			keyPressed[2] = 1;
 		}else if(event.key == "ArrowRight"){
 			keyPressed[3] = 1;
+		}else if(event.key == "H" || event.key == "h"){
+			$scope.setHorn(1);
 		}
 		checkKeysForChanges();
 	};
@@ -81,6 +87,8 @@ dataApp.controller('dataCtrl', function($scope, $http){
 			keyPressed[2] = 0;
 		}else if(event.key == "ArrowRight"){
 			keyPressed[3] = 0;
+		}else if(event.key == "H" || event.key == "h"){
+			$scope.setHorn(0);
 		}
 		checkKeysForChanges();
 	};

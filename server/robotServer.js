@@ -293,6 +293,14 @@ function answSetPosition(answer, socketBundle){
 
 }
 
+function setHorn(socketBundle, value){
+	queueSetter(socketBundle, "SetHorn!"+JSON.stringify([value]), answSetHorn);
+}
+
+function answSetHorn(answer, socketBundle){
+
+}
+
 // HANDLER
 
 function UICommandHandler(command, index, values){
@@ -300,5 +308,7 @@ function UICommandHandler(command, index, values){
 		setThrottle(clients[index], values);
 	}else if(String(command) == "setPosition"){
 		setPosition(clients[index], values);
+	}else if(String(command) == "setHorn"){
+		setHorn(clients[index], values);
 	}
 }

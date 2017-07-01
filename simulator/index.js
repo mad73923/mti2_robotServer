@@ -87,6 +87,10 @@ function handleCommand(dataIn){
 		position = values;
 		connection.write("SetPosition=OK");
 	}
+	if(dataInStr.match(/SetHorn!\[\d+\]/)){
+		process.stdout.write('\x07');
+		connection.write("SetHorn=OK");
+	}
 };
 
 function plusMinusMax(value, maxAbsValue){
