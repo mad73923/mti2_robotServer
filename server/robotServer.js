@@ -55,7 +55,7 @@ exports.emitter.on('newCommand',(command, index, values)=>{
 		UICommandHandler(command, index, values);
 	});
 
-// level: error, warn, info, debug, trace
+// level: error, warn, info, debug
 function serverLog(level, message){
 	if(serverLogHistory[level] == undefined){
 		serverLogHistory[level] = [];

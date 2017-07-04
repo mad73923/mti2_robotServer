@@ -122,8 +122,9 @@
 					<div class="col-lg-6 col-sm-6" id="log">
                         <div class="panel panel-default">
                             <div class="panel-heading">Log</div>
-                            <div class="pre-scrollable" style="max-height: 200px;">
                             <div class="panel-body">
+                            <label><input type="checkbox"> error </label><label><input type="checkbox"> warn </label><label><input type="checkbox"> info </label><label><input type="checkbox"> debug </label>
+                            <div class="pre-scrollable" style="max-height: 200px;">
                             	{{stringifyLog(data.clients[currentItemIndex].log.debug)}}
                             </div>
                             </div>
