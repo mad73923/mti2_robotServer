@@ -1,6 +1,7 @@
 var port = 2323;
 
 var net = require('net');
+var moment = require('moment');
 
 const EventEmitter = require('events');
 const util = require('util');
@@ -14,6 +15,7 @@ util.inherits(RobotServerEmitter, EventEmitter);
 var exports = module.exports = {};
 
 var clients = new Array();
+var serverLogHistory = {};
 
 // Server
 
@@ -22,25 +24,28 @@ var server = net.createServer(function(socket){
 });
 
 exports.startServer = function(){
-	console.log("Start Robot-Server at localhost:"+port);
+	serverLog("info", "Start Robot-Server at localhost:"+port);
 	server.listen(port, '0.0.0.0', function(){
-		console.log("Robot-Server started!");
+		serverLog("info", "Robot-Server started!");
 	});
 };
 
 exports.stopServer = function(){
-	console.log("Stopping Robot-Server!");
+	serverLog("info", "Stopping Robot-Server!")
 	server.close();
 }
 
 exports.getClientData = function(){
-	var ret = new Array();
+	var ret = {};
+	ret.clients = new Array();
 	clients.forEach(function(item){
-		ret.push({
+		ret.clients.push({
 			uid: 	item.uid,
-			data: 	item.data 
+			data: 	item.data,
+			log: 	item.log 
 		});
 	});
+	ret.serverLog = serverLogHistory;
 	return ret;
 };
 
@@ -49,6 +54,36 @@ exports.emitter = new RobotServerEmitter();
 exports.emitter.on('newCommand',(command, index, values)=>{
 		UICommandHandler(command, index, values);
 	});
+
+// level: error, warn, info, debug, trace
+function serverLog(level, message){
+	if(serverLogHistory[level] == undefined){
+		serverLogHistory[level] = [];
+	}
+	var timeString = moment().format('HH:mm:ss.SSS');
+	serverLogHistory[level].push([timeString, message]);
+	limitArray(serverLogHistory[level]);
+	if(level =="info" || level == "error"){
+		console.log(timeString, message);
+	}
+	exports.emitter.emit('newData');
+};
+
+function clientLog(socketBundle, level, message){
+	if(socketBundle.log[level] == undefined){
+		socketBundle.log[level] = [];
+	}
+	var timeString = moment().format('HH:mm:ss.SSS');
+	socketBundle.log[level].push([timeString, message]);
+	limitArray(socketBundle.log[level]);
+	exports.emitter.emit('newData');
+}
+
+function limitArray(array){
+	if(array.length > 500){
+		array.shift();
+	}
+}
 
 // Intervall function
 
@@ -63,26 +98,27 @@ function findSocket(element, index, array){
 };
 
 function connectionListener(socket){
-	console.log("New client connected, checking validity...");
+	serverLog("info", "New client connected, checking validity...");
 	socket.write("GetUID?\n");
 
 	socket.on('data', (dataIn)=>{
-		//console.log("RX data:"+dataIn);
+		serverLog("debug", "RX data: "+dataIn);
 		var knownSocket = clients.find(findSocket, socket);
 		if(knownSocket==undefined){
 			checkValidClient(dataIn, socket);
 		}else{
+			clientLog(knownSocket, "debug", "RX data: "+dataIn);
 			handleAnswer(dataIn, knownSocket);
 		}
 	});
 
 	socket.on('close', ()=>{
-		console.log("Connection to client closed.");
+		serverLog("info", "Connection to client closed.");
 		deleteClientIfExists(socket);
 	});
 
 	socket.on('error', ()=>{
-		console.log("Connection error.");
+		serverLog("error", "Connection error.");
 		deleteClientIfExists(socket);
 	});
 };
@@ -94,7 +130,7 @@ function findUID(element, index, array){
 }
 
 function createNewClient(socket, uid){
-	clients.push({
+	var index = clients.push({
 			socket: 		socket,
 			commandQueue: 	[],
 			answerQueue: 	[],
@@ -103,14 +139,16 @@ function createNewClient(socket, uid){
 				radar: 			{
 					labels: 		[]
 				}
-			}
+			},
+			log: 			{}
 		});
+	clientLog(clients[index-1], "info", "Client created.");
 }
 
 function deleteClientIfExists(socket){
 	var index = clients.findIndex(findSocket, socket);
 	if(index != -1){
-		console.log("Deleted client UID:"+clients[index].uid);
+		serverLog("info", "Deleted client UID:"+clients[index].uid);
 		clients.splice(index,1);
 		exports.emitter.emit('newData');
 	}
@@ -119,7 +157,7 @@ function deleteClientIfExists(socket){
 function deleteIfUIDAlreadyExists(uid){
 	var index = clients.findIndex(findUID, uid);
 	if(index != -1){
-		console.log("Delete old client with same UID");
+		serverLog("info", "Delete old client with same UID");
 		clients[index].socket.destroy();
 		clients.splice(index,1);
 		exports.emitter.emit('newData');
@@ -142,23 +180,24 @@ function checkValidClient(answer, socket){
 	var validUID = /UID=[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){11}/;
 	var strAnswer = String(answer);
 	if(strAnswer.match(validUID)!=null){
-		console.log("Client valid! "+answer);
+		serverLog("info", "Client valid! "+answer);
 		var strUID = strAnswer.split("=")[1];
 		deleteIfUIDAlreadyExists(strUID);
 		createNewClient(socket, strUID);
 		exports.emitter.emit('newData');
 	}else{
-		console.log("Client not valid!");
+		serverLog("error", "Client not valid!");
 		socket.end();
 	}
 };
 
 function unexpectedAnswer(answer, socketBundle){
-	console.log("Unexpected Message from UID "+socketBundle.uid+" :"+answer);
+	serverLog("error", "Unexpected Message from UID "+socketBundle.uid+" :"+answer);
+	clientLog(socketBundle, "error", "Unexpected Message: "+answer)
 };
 
 function wrongFormat(socketBundle, answer, format){
-	console.log("Wrong format UID "+socketBundle.uid+"\nexpected\n"+format+"\nreceived\n"+answer);
+	serverLog("error", "Wrong format UID "+socketBundle.uid+"\nexpected\n"+format+"\nreceived\n"+answer);
 }
 
 // Commands
@@ -185,9 +224,11 @@ function queueSetter(socketBundle, command, next){
 	socketBundle.answerQueue.unshift(next);
 	if(socketBundle.answerQueue.length > 1){
 		socketBundle.commandQueue.unshift(function(){
+			clientLog(socketBundle, "debug", "TX data: "+command);
 			socketBundle.socket.write(command)
 		});
 	}else{
+		clientLog(socketBundle, "debug", "TX data: "+command);
 		socketBundle.socket.write(command);
 	}
 }
@@ -197,10 +238,7 @@ function updateData(){
 	clients.forEach(function(item){
 		getPos(item);
 		getDistances(item);
-		//driveTurn(item, -90);
-		//driveStraight(item, 120);
 	});
-	//console.log(clients);
 };
 
 // ================== Robot functions ==================================

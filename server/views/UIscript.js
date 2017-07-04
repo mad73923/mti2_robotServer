@@ -8,7 +8,8 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	let fullThrottle = 1000;
 	
 	$scope.currentItemIndex = -1;
-	$scope.clients = [];
+	$scope.data = {};
+	$scope.data.clients = [];
 	$scope.manualThrottle = fullThrottle;
 	updateClients();
 
@@ -48,12 +49,22 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	};
 
 	function newData(data){
-		let oldLength = $scope.clients.length;
-		$scope.clients = data;
-		if(oldLength != $scope.clients.length){
+		let oldLength = $scope.data.clients.length;
+		$scope.data = data;
+		if(oldLength != $scope.data.clients.length){
 			$scope.currentItemIndex = -1;
 		}
 	};
+
+	$scope.stringifyLog = function(log){
+		if(log == undefined)
+			return;
+		var str = "";
+		log.forEach(function(item){
+			str += item[0]+" "+item[1]+"\n\r";
+		});
+		return str;
+	}
 
 	$scope.setThrottle = function(throttle){
 		if(throttle[0]!=undefined && throttle[1]!=undefined){
