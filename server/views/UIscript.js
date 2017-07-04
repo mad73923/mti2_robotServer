@@ -56,7 +56,9 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	};
 
 	$scope.setThrottle = function(throttle){
-		socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
+		if(throttle[0]!=undefined && throttle[1]!=undefined){
+			socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
+		}
 	};
 
 	$scope.setHorn = function(enable){
