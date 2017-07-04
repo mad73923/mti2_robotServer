@@ -103,23 +103,23 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				throttle = [0,0];
 			}else if(arraySum ==1){
 				if(keyPressed[0]){
-					throttle = [fullThrottle,fullThrottle];
+					throttle = [$scope.manualThrottle,$scope.manualThrottle];
 				}else if(keyPressed[1]){
-					throttle = [-fullThrottle,fullThrottle];
+					throttle = [-$scope.manualThrottle,$scope.manualThrottle];
 				}else if(keyPressed[2]){
-					throttle = [-fullThrottle,-fullThrottle];
+					throttle = [-$scope.manualThrottle,-$scope.manualThrottle];
 				}else if(keyPressed[3]){
-					throttle = [fullThrottle,-fullThrottle];
+					throttle = [$scope.manualThrottle,-$scope.manualThrottle];
 				}
 			}else{
 				if(keyPressed[0] && keyPressed[1]){
-					throttle = [0,fullThrottle];
+					throttle = [0,$scope.manualThrottle];
 				}else if(keyPressed[1] && keyPressed[2]){
-					throttle = [0,-fullThrottle];
+					throttle = [0,-$scope.manualThrottle];
 				}else if(keyPressed[2] && keyPressed[3]){
-					throttle = [-fullThrottle,0];
+					throttle = [-$scope.manualThrottle,0];
 				}else if(keyPressed[0] && keyPressed[3]){
-					throttle = [fullThrottle,0];
+					throttle = [$scope.manualThrottle,0];
 				}else{
 					throttle = [0,0];
 				}
