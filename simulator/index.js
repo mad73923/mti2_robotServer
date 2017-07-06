@@ -91,6 +91,12 @@ function handleCommand(dataIn){
 		process.stdout.write('\x07');
 		connection.write("SetHorn=OK");
 	}
+	if(dataInStr.match(/SetSpeed!\[\d+,\d+\]/)){
+		connection.write("SetSpeed=OK");
+	}
+	if(dataInStr.match(/SetPID!\[\d+,\d+,\d+\]/)){
+		connection.write("SetPID=OK");
+	}
 };
 
 function plusMinusMax(value, maxAbsValue){
