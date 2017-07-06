@@ -127,9 +127,9 @@
 	                            <label> Warning <input type="checkbox" ng-model="checkboxModel.Warning"> </label>
 	                            <label> Info <input type="checkbox"  ng-model="checkboxModel.Info"> </label>
 	                            <label> Debug <input type="checkbox" ng-model="checkboxModel.Debug"> </label>
-                            <div class="pre-scrollable" style="max-height: 200px;">
+                            <textarea class="form-control" rows="10">
                             	{{stringifyLog(data.clients[currentItemIndex].log)}}
-                            </div>
+                            </textarea>
                             </div>
                         </div>
                     </div>

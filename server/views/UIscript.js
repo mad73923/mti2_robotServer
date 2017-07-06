@@ -17,9 +17,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
         Info : false,
     	Debug : false
     };
-    var str = "";
 	var unsortedTimes = new Array();
-	var iterator = 0;
 	updateClients();
 
 	$scope.Math = window.Math;
@@ -67,30 +65,29 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	$scope.stringifyLog = function(log){
 		
-		str = "";
-		iterator = 0;
 		unsortedTimes = new Array();
+		var str = "";
+		
+		logSplitting($scope.checkboxModel.Error,  	log.error);
+		logSplitting($scope.checkboxModel.Warning,	log.warning);
+		logSplitting($scope.checkboxModel.Info,		log.info);
+		logSplitting($scope.checkboxModel.Debug,	log.debug);
 
-		logSplitting($scope.checkboxModel.Error,log.error);
-		logSplitting($scope.checkboxModel.Warning,log.warning);
-		logSplitting($scope.checkboxModel.Info,log.info);
-		logSplitting($scope.checkboxModel.Debug,log.debug);
+		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
+		unsortedTimes.forEach(function(item){
 
-		unsortedTimes.sort();
-		str = unsortedTimes.toString();
+			str += new Date(item[0]).toString() + item[1].toString() + "\n\r";
+		});
+
 		return str;
 	}
 
 	function logSplitting(chkBox,splitlog){
 		
 		if(chkBox){
-		
 			if(splitlog != undefined){
-
-				splitlog.forEach(function(item){
-				
-					str += item[0] +" "+ item[1] +"\n\r";
-					unsortedTimes[iterator++]=item[0];
+				splitlog.forEach(function(item){			
+					unsortedTimes.push([item[0], item[1]]);
 				});
 			}	
 		}	

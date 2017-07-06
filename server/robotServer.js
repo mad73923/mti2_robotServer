@@ -60,11 +60,11 @@ function serverLog(level, message){
 	if(serverLogHistory[level] == undefined){
 		serverLogHistory[level] = [];
 	}
-	var timeString = moment().format('HH:mm:ss.SSS');
-	serverLogHistory[level].push([timeString, message]);
+	var time = (new Date).getTime();;
+	serverLogHistory[level].push([time, message]);
 	limitArray(serverLogHistory[level]);
 	if(level =="info" || level == "error"){
-		console.log(timeString, message);
+		console.log(time, message);
 	}
 	exports.emitter.emit('newData');
 };
@@ -73,8 +73,8 @@ function clientLog(socketBundle, level, message){
 	if(socketBundle.log[level] == undefined){
 		socketBundle.log[level] = [];
 	}
-	var timeString = moment().format('HH:mm:ss.SSS');
-	socketBundle.log[level].push([timeString, message]);
+	var time = (new Date).getTime();;
+	socketBundle.log[level].push([time, message]);
 	limitArray(socketBundle.log[level]);
 	exports.emitter.emit('newData');
 }
