@@ -11,6 +11,15 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	$scope.data = {};
 	$scope.data.clients = [];
 	$scope.manualThrottle = fullThrottle;
+	$scope.checkboxModel = {
+        Error : false,
+        Warning: false,
+        Info : false,
+    	Debug : false
+    };
+    var str = "";
+	var unsortedTimes = new Array();
+	var iterator = 0;
 	updateClients();
 
 	$scope.Math = window.Math;
@@ -57,14 +66,36 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	};
 
 	$scope.stringifyLog = function(log){
-		if(log == undefined)
-			return;
-		var str = "";
-		log.forEach(function(item){
-			str += item[0]+" "+item[1]+"\n\r";
-		});
+		
+		str = "";
+		iterator = 0;
+		unsortedTimes = new Array();
+
+		logSplitting($scope.checkboxModel.Error,log.error);
+		logSplitting($scope.checkboxModel.Warning,log.warning);
+		logSplitting($scope.checkboxModel.Info,log.info);
+		logSplitting($scope.checkboxModel.Debug,log.debug);
+
+		unsortedTimes.sort();
+		str = unsortedTimes.toString();
 		return str;
 	}
+
+	function logSplitting(chkBox,splitlog){
+		
+		if(chkBox){
+		
+			if(splitlog != undefined){
+
+				splitlog.forEach(function(item){
+				
+					str += item[0] +" "+ item[1] +"\n\r";
+					unsortedTimes[iterator++]=item[0];
+				});
+			}	
+		}	
+	}
+
 
 	$scope.setThrottle = function(throttle){
 		if(throttle[0]!=undefined && throttle[1]!=undefined){

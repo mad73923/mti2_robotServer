@@ -97,22 +97,22 @@
                             	<tr>
                             	<td></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,manualThrottle])">
-  <span class="glyphicon glyphicon-menu-up"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-up"></span></button></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setHorn(0)" ng-mousedown="setHorn(1)">
-  <span class="glyphicon glyphicon-bullhorn"></span></button></td>
+  									<span class="glyphicon glyphicon-bullhorn"></span></button></td>
                             	</tr>
                             	<tr>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,manualThrottle])">
-  <span class="glyphicon glyphicon-menu-left"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-left"></span></button></td>
                             	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="setThrottle([0,0])">
-  <span class="glyphicon glyphicon-stop"></span></button></td>
+									<span class="glyphicon glyphicon-stop"></span></button></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,-manualThrottle])">
-  <span class="glyphicon glyphicon-menu-right"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-right"></span></button></td>
                             	</tr>
                             	<tr>
                             	<td></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,-manualThrottle])">
-  <span class="glyphicon glyphicon-menu-down"></span></button></td>
+ 									<span class="glyphicon glyphicon-menu-down"></span></button></td>
                             	<td></td>
                             	</tr>
                             </tbody>
@@ -123,9 +123,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Log</div>
                             <div class="panel-body">
-                            <label><input type="checkbox"> error </label><label><input type="checkbox"> warn </label><label><input type="checkbox"> info </label><label><input type="checkbox"> debug </label>
+	                            <label> Error <input type="checkbox" ng-model="checkboxModel.Error"> </label>
+	                            <label> Warning <input type="checkbox" ng-model="checkboxModel.Warning"> </label>
+	                            <label> Info <input type="checkbox"  ng-model="checkboxModel.Info"> </label>
+	                            <label> Debug <input type="checkbox" ng-model="checkboxModel.Debug"> </label>
                             <div class="pre-scrollable" style="max-height: 200px;">
-                            	{{stringifyLog(data.clients[currentItemIndex].log.debug)}}
+                            	{{stringifyLog(data.clients[currentItemIndex].log)}}
                             </div>
                             </div>
                         </div>
