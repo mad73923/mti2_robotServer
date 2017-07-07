@@ -68,21 +68,23 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		unsortedTimes = new Array();
 		var str = "";
 		
-		logSplitting($scope.checkboxModel.Error,  	log.error);
-		logSplitting($scope.checkboxModel.Warning,	log.warning);
-		logSplitting($scope.checkboxModel.Info,		log.info);
-		logSplitting($scope.checkboxModel.Debug,	log.debug);
+		logCatching($scope.checkboxModel.Error,  	log.error);
+		logCatching($scope.checkboxModel.Warning,	log.warning);
+		logCatching($scope.checkboxModel.Info,		log.info);
+		logCatching($scope.checkboxModel.Debug,		log.debug);
 
 		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
 		unsortedTimes.forEach(function(item){
 
-			str += new Date(item[0]).toString() + item[1].toString() + "\n\r";
+			str += new Date(item[0]).toString() + item[1].toString();
+			str = str.replace("\n\r","");
+			str = str + "\n\r";
 		});
 
 		return str;
 	}
 
-	function logSplitting(chkBox,splitlog){
+	function logCatching(chkBox,splitlog){
 		
 		if(chkBox){
 			if(splitlog != undefined){
