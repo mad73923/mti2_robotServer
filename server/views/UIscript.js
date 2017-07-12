@@ -32,6 +32,10 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	    }
 	};
 
+	$scope.radarColors = ["rgba(224, 108, 112, 1)",
+            "rgba(224, 108, 112, 1)",
+            "rgba(224, 108, 112, 1)"];
+
 	$scope.setTempItemIndex = function(index){
 		$scope.currentItemIndex = index;
 	};
