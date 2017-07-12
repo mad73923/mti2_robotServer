@@ -76,12 +76,22 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
 		unsortedTimes.forEach(function(item){
 
-			str += new Date(item[0]).toString() + item[1].toString();
+			str +=  convertSecondsToHMmSs(item[0]) + item[1].toString();
 			str = str.replace("\n\r","");
-			str = str + "\n\r";
+			str = str + "      \n\r";
 		});
 
 		return str;
+	}
+
+	function convertSecondsToHMmSs(millis) {
+		var temp = parseInt(millis/1000);
+	    var ms = millis%1000;
+	    var s = parseInt(temp % 60);
+	    var m = parseInt((temp / 60) % 60);
+	    var h = 2+parseInt((temp / (60 * 60)) % 24);
+	    var retStr = h + ":" + m + ":" + s + ":" + ms +" ";
+	    return retStr;
 	}
 
 	function logCatching(chkBox,splitlog){
