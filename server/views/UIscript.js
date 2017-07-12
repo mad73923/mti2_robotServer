@@ -11,10 +11,16 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	$scope.data = {};
 	$scope.data.clients = [];
 	$scope.manualThrottle = fullThrottle;
-	$scope.checkboxModel = {
-        Error : false,
-        Warning: false,
-        Info : false,
+	$scope.checkboxModelClient = {
+        Error : true,
+        Warning: true,
+        Info : true,
+    	Debug : false
+    };
+    $scope.checkboxModelServer = {
+        Error : true,
+        Warning: true,
+        Info : true,
     	Debug : false
     };
 	var unsortedTimes = new Array();
@@ -63,15 +69,15 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		}
 	};
 
-	$scope.stringifyLog = function(log){
+	$scope.stringifyLog = function(checkBoxes, log){
 		
 		unsortedTimes = new Array();
 		var str = "";
 		
-		logCatching($scope.checkboxModel.Error,  	log.error);
-		logCatching($scope.checkboxModel.Warning,	log.warning);
-		logCatching($scope.checkboxModel.Info,		log.info);
-		logCatching($scope.checkboxModel.Debug,		log.debug);
+		logCatching(checkBoxes.Error,  	log.error);
+		logCatching(checkBoxes.Warning,	log.warning);
+		logCatching(checkBoxes.Info,		log.info);
+		logCatching(checkBoxes.Debug,		log.debug);
 
 		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
 		unsortedTimes.forEach(function(item){

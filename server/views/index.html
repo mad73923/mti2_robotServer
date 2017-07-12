@@ -123,11 +123,11 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Log</div>
                             <div class="panel-body">
-	                            <label> Error <input type="checkbox" ng-model="checkboxModel.Error"> </label>
-	                            <label> Warning <input type="checkbox" ng-model="checkboxModel.Warning"> </label>
-	                            <label> Info <input type="checkbox"  ng-model="checkboxModel.Info"> </label>
-	                            <label> Debug <input type="checkbox" ng-model="checkboxModel.Debug"> </label>
-                            <textarea class="form-control" rows="10">{{stringifyLog(data.clients[currentItemIndex].log)}}</textarea>
+	                            <label> Error <input type="checkbox" ng-model="checkboxModelClient.Error"> </label>
+	                            <label> Warning <input type="checkbox" ng-model="checkboxModelClient.Warning"> </label>
+	                            <label> Info <input type="checkbox"  ng-model="checkboxModelClient.Info"> </label>
+	                            <label> Debug <input type="checkbox" ng-model="checkboxModelClient.Debug"> </label>
+                            <textarea class="form-control" rows="10">{{stringifyLog(checkboxModelClient, data.clients[currentItemIndex].log)}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -137,6 +137,18 @@
 			<div id="home" ng-show="currentItemIndex==-1">
 				{{data.clients.length}} Clients connected<br/>
 				<!--Raw data:<br/>{{data}}-->
+				<div class="col-lg-6 col-sm-6" id="log">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Log</div>
+                        <div class="panel-body">
+                            <label> Error <input type="checkbox" ng-model="checkboxModelServer.Error"> </label>
+                            <label> Warning <input type="checkbox" ng-model="checkboxModelServer.Warning"> </label>
+                            <label> Info <input type="checkbox"  ng-model="checkboxModelServer.Info"> </label>
+                            <label> Debug <input type="checkbox" ng-model="checkboxModelServer.Debug"> </label>
+                        <textarea class="form-control" rows="10">{{stringifyLog(checkboxModelServer, data.serverLog)}}</textarea>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>
