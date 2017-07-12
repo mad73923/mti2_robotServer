@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="dataApp">
+<html lang="en" ng-app="dataApp"
 <head>
 <meta charset="UTF-8">
 <title>Mission Control</title>
@@ -31,6 +31,7 @@
                             <div class="panel-heading">Radar</div>
                             <div class="panel-body">
 								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels" chart-options="radarOptions"></canvas>
+								<td><button type="button" class="btn btn-default btn-lg" ng-mousedown="changeScanmode()"> Scan ON/OFF </button></td>
 							</div>
 						</div>
 					</div>

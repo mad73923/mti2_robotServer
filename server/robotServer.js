@@ -297,7 +297,15 @@ function setHorn(socketBundle, value){
 	queueSetter(socketBundle, "SetHorn!"+JSON.stringify([value]), answSetHorn);
 }
 
+function changeScanMode(socketBundle){
+	 queueSetter(socketBundle, "ChangeScanmode!", answChangeScanmode);
+}
+
 function answSetHorn(answer, socketBundle){
+
+}
+
+function answChangeScanmode(answer, socketBundle){
 
 }
 
@@ -310,5 +318,7 @@ function UICommandHandler(command, index, values){
 		setPosition(clients[index], values);
 	}else if(String(command) == "setHorn"){
 		setHorn(clients[index], values);
-	}
+	}else if(String(command) == "changeScanmode"){
+		changeScanMode(clients[index]);
+	}	
 }
