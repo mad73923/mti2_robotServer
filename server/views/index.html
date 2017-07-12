@@ -21,16 +21,15 @@
 		<div>
 			<ul class="nav nav-tabs">
 				<li><a href="#home" ng-click="setTempItemIndex(-1)">Home</a></li>
-				<li ng-repeat="client in clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
+				<li ng-repeat="client in data.clients"><a href="#{{$index}}" ng-click="setTempItemIndex($index)">{{client.uid}}</a></li>
 			</ul>
 			<div id="{{currentItemIndex}}" class="tab-content"  ng-show="currentItemIndex!=-1">
 				<div class="tab-pane active" role="tabpanel">
-					Client data:{{clients[currentItemIndex]}}<br/>
 					<div class="col-lg-3 col-sm-6" id="radar-chart">
                         <div class="panel panel-default">
                             <div class="panel-heading">Radar</div>
                             <div class="panel-body">
-								<canvas id="radar" class="chart chart-radar" chart-data="clients[currentItemIndex].data.radar.distances" chart-labels="clients[currentItemIndex].data.radar.labels" chart-options="radarOptions"></canvas>
+								<canvas id="radar" class="chart chart-radar" chart-data="data.clients[currentItemIndex].data.radar.distances" chart-labels="data.clients[currentItemIndex].data.radar.labels" chart-options="radarOptions"></canvas>
 							</div>
 						</div>
 					</div>
@@ -47,15 +46,15 @@
                             <tbody>
                             	<tr>
                             	<td>Position X:</td>
-                            	<td>{{clients[currentItemIndex].data.pos[0]}}</td>
+                            	<td>{{data.clients[currentItemIndex].data.pos[0]}}</td>
                             	</tr>
                             	<tr>
                             	<td>Position Y:</td>
-                            	<td>{{clients[currentItemIndex].data.pos[1]}}</td>
+                            	<td>{{data.clients[currentItemIndex].data.pos[1]}}</td>
                             	</tr>
                             	<tr>
                             	<td>Theta:</td>
-                            	<td>{{Math.round(clients[currentItemIndex].data.pos[2]*(180/Math.PI)*10)/10}}°</td>
+                            	<td>{{Math.round(data.clients[currentItemIndex].data.pos[2]*(180/Math.PI)*10)/10}}°</td>
                             	</tr>
                             </tbody>
                             </table>
@@ -77,11 +76,11 @@
                             <tbody>
                             	<tr>
                             	<td>Throttle left:</td>
-                            	<td>{{clients[currentItemIndex].data.motor[0]}}</td>
+                            	<td>{{data.clients[currentItemIndex].data.motor[0]}}</td>
                             	</tr>
                             	<tr>
                             	<td>Throttle right:</td>
-                            	<td>{{clients[currentItemIndex].data.motor[1]}}</td>
+                            	<td>{{data.clients[currentItemIndex].data.motor[1]}}</td>
                             	</tr>
                             </tbody>
                             </table>
@@ -98,34 +97,58 @@
                             	<tr>
                             	<td></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,manualThrottle])">
-  <span class="glyphicon glyphicon-menu-up"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-up"></span></button></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setHorn(0)" ng-mousedown="setHorn(1)">
-  <span class="glyphicon glyphicon-bullhorn"></span></button></td>
+  									<span class="glyphicon glyphicon-bullhorn"></span></button></td>
                             	</tr>
                             	<tr>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,manualThrottle])">
-  <span class="glyphicon glyphicon-menu-left"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-left"></span></button></td>
                             	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="setThrottle([0,0])">
-  <span class="glyphicon glyphicon-stop"></span></button></td>
+									<span class="glyphicon glyphicon-stop"></span></button></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,-manualThrottle])">
-  <span class="glyphicon glyphicon-menu-right"></span></button></td>
+  									<span class="glyphicon glyphicon-menu-right"></span></button></td>
                             	</tr>
                             	<tr>
                             	<td></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,-manualThrottle])">
-  <span class="glyphicon glyphicon-menu-down"></span></button></td>
+ 									<span class="glyphicon glyphicon-menu-down"></span></button></td>
                             	<td></td>
                             	</tr>
                             </tbody>
                             </table>
 						</div>
 					</div>
+					<div class="col-lg-6 col-sm-6" id="log">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Log</div>
+                            <div class="panel-body">
+	                            <label> Error <input type="checkbox" ng-model="checkboxModelClient.Error"> </label>
+	                            <label> Warning <input type="checkbox" ng-model="checkboxModelClient.Warning"> </label>
+	                            <label> Info <input type="checkbox"  ng-model="checkboxModelClient.Info"> </label>
+	                            <label> Debug <input type="checkbox" ng-model="checkboxModelClient.Debug"> </label>
+                            <textarea class="form-control" rows="10">{{stringifyLog(checkboxModelClient, data.clients[currentItemIndex].log)}}</textarea>
+                            </div>
+                        </div>
+                    </div>
 				</div>
+				<!--Client data:{{data.clients[currentItemIndex]}}<br/>-->
 			</div>
 			<div id="home" ng-show="currentItemIndex==-1">
-				{{clients.length}} Clients connected<br/>
-				Raw data:<br/>
-				{{clients}}
+				{{data.clients.length}} Clients connected<br/>
+				<!--Raw data:<br/>{{data}}-->
+				<div class="col-lg-6 col-sm-6" id="log">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Log</div>
+                        <div class="panel-body">
+                            <label> Error <input type="checkbox" ng-model="checkboxModelServer.Error"> </label>
+                            <label> Warning <input type="checkbox" ng-model="checkboxModelServer.Warning"> </label>
+                            <label> Info <input type="checkbox"  ng-model="checkboxModelServer.Info"> </label>
+                            <label> Debug <input type="checkbox" ng-model="checkboxModelServer.Debug"> </label>
+                        <textarea class="form-control" rows="10">{{stringifyLog(checkboxModelServer, data.serverLog)}}</textarea>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>

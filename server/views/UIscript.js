@@ -8,8 +8,22 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	let fullThrottle = 1000;
 	
 	$scope.currentItemIndex = -1;
-	$scope.clients = [];
+	$scope.data = {};
+	$scope.data.clients = [];
 	$scope.manualThrottle = fullThrottle;
+	$scope.checkboxModelClient = {
+        Error : true,
+        Warning: true,
+        Info : true,
+    	Debug : false
+    };
+    $scope.checkboxModelServer = {
+        Error : true,
+        Warning: true,
+        Info : true,
+    	Debug : false
+    };
+	var unsortedTimes = new Array();
 	updateClients();
 
 	$scope.Math = window.Math;
@@ -49,12 +63,61 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	};
 
 	function newData(data){
-		let oldLength = $scope.clients.length;
-		$scope.clients = data;
-		if(oldLength != $scope.clients.length){
+		let oldLength = $scope.data.clients.length;
+		$scope.data = data;
+		if(oldLength != $scope.data.clients.length){
 			$scope.currentItemIndex = -1;
 		}
 	};
+
+	$scope.stringifyLog = function(checkBoxes, log){
+		
+		unsortedTimes = new Array();
+		var str = "";
+		
+		logCatching(checkBoxes.Error,  	log.error);
+		logCatching(checkBoxes.Warning,	log.warning);
+		logCatching(checkBoxes.Info,		log.info);
+		logCatching(checkBoxes.Debug,		log.debug);
+
+		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
+		unsortedTimes.forEach(function(item){
+			item[1] = item[1].replace("\n","");
+			str +=  convertDateObject(item[0]) +' ' + item[1].toString();
+			str += "\n";
+		});
+
+		return str;
+	}
+
+	function convertDateObject(mills){
+		// Create a new JavaScript Date object based on the timestamp
+		// multiplied by 1000 so that the argument is in milliseconds, not seconds.
+		var date = new Date(mills);
+		// Hours part from the timestamp
+		var hours = date.getHours();
+		// Minutes part from the timestamp
+		var minutes = "0" + date.getMinutes();
+		// Seconds part from the timestamp
+		var seconds = "0" + date.getSeconds();
+		// Milliseconds part from the timestamp
+		var milli = "00" + date.getMilliseconds();
+
+		// Will display time in 10:30:23 format
+		return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)+'.'+milli.substr(-3);
+	}
+
+	function logCatching(chkBox,splitlog){
+		
+		if(chkBox){
+			if(splitlog != undefined){
+				splitlog.forEach(function(item){			
+					unsortedTimes.push([item[0], item[1]]);
+				});
+			}	
+		}	
+	}
+
 
 	$scope.setThrottle = function(throttle){
 		if(throttle[0]!=undefined && throttle[1]!=undefined){
