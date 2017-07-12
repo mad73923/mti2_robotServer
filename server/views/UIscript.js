@@ -75,23 +75,29 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
 		unsortedTimes.forEach(function(item){
-
-			str +=  convertSecondsToHMmSs(item[0]) + item[1].toString();
-			str = str.replace("\n\r","");
-			str = str + "      \n\r";
+			item[1] = item[1].replace("\n","");
+			str +=  convertDateObject(item[0]) +' ' + item[1].toString();
+			str += "\n";
 		});
 
 		return str;
 	}
 
-	function convertSecondsToHMmSs(millis) {
-		var temp = parseInt(millis/1000);
-	    var ms = millis%1000;
-	    var s = parseInt(temp % 60);
-	    var m = parseInt((temp / 60) % 60);
-	    var h = 2+parseInt((temp / (60 * 60)) % 24);
-	    var retStr = h + ":" + m + ":" + s + ":" + ms +" ";
-	    return retStr;
+	function convertDateObject(mills){
+		// Create a new JavaScript Date object based on the timestamp
+		// multiplied by 1000 so that the argument is in milliseconds, not seconds.
+		var date = new Date(mills);
+		// Hours part from the timestamp
+		var hours = date.getHours();
+		// Minutes part from the timestamp
+		var minutes = "0" + date.getMinutes();
+		// Seconds part from the timestamp
+		var seconds = "0" + date.getSeconds();
+		// Milliseconds part from the timestamp
+		var milli = "00" + date.getMilliseconds();
+
+		// Will display time in 10:30:23 format
+		return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)+'.'+milli.substr(-3);
 	}
 
 	function logCatching(chkBox,splitlog){
