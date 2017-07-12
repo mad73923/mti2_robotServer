@@ -7,10 +7,10 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	let keyPressedOld = [0,0,0,0];
 	let fullThrottle = 1000;
 
-	$scope.PIDmanualSpeed = 400;
-	$scope.PID_kP = 1;
-	$scope.PID_kI = 10;
-	$scope.PID_kD = 0;
+	$scope.PIDmanualSpeed = 1200;
+	$scope.PID_kP = 30;
+	$scope.PID_kI = 20;
+	$scope.PID_kD = 8;
 	
 	$scope.currentItemIndex = -1;
 	$scope.clients = [];
@@ -76,7 +76,7 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	}
 
 	$scope.robotMove = function(values){
-		if($scope.motorMode==0){
+		if($scope.motorMode==0 || (values[0]==0 && values[1]==0)){
 			values[0]*=$scope.manualThrottle;
 			values[1]*=$scope.manualThrottle;
 			$scope.setThrottle(values);
