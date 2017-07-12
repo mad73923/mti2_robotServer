@@ -70,49 +70,55 @@
                             <thead>
                             <tr>
                             <th class="col-md-5"> Parameter </th>
-                            <th> Value </th>
+                            <th> Left </th>
+                            <th> Right </th>
                             </tr>
                             </thead>
                             <tbody>
                             	<tr>
-                            	<td>Throttle left:</td>
+                            	<td>Throttle</td>
                             	<td>{{data.clients[currentItemIndex].data.motor[0]}}</td>
+                            	<td>{{data.clients[currentItemIndex].data.motor[1]}}</td>
                             	</tr>
                             	<tr>
-                            	<td>Throttle right:</td>
-                            	<td>{{data.clients[currentItemIndex].data.motor[1]}}</td>
+                            	<td>Speed</td>
+                            	<td></td>
+                            	<td></td>
                             	</tr>
                             </tbody>
                             </table>
+                            <ul class="nav nav-tabs">
+                            	<li colspan="3"><a href="#{{currentItemIndex}}" ng-click="setMotorMode(0)">Manual</a></li>
+                            	<li colspan="3"><a href="#{{currentItemIndex}}" ng-click="setMotorMode(1)">PID</a></li>
+                            </ul>
                             <table class="table">
-                            <thead>
-                            <tr>
-                            <th colspan="3">Manual control</th>
-                            </tr>
-                            <tr>
-                            <th colspan="3">Speed <input type="number" name="input" ng-model="manualThrottle" required></th>
-                            </tr>
-                            </thead>
                             <tbody>
+                            <tr ng-show="motorMode==0">
+                            <td colspan="3">Throttle <input type="number" name="input" ng-model="manualThrottle" required></td>
+                            </tr>
+                            <tr ng-show="motorMode==1"><td>Speed </td><td colspan="2"><input type="number" name="input" ng-model="PIDmanualSpeed" required> mm/s</td></tr>
+                            <tr ng-show="motorMode==1"><td>kP </td><td colspan="2"><input type="number" name="input" ng-model="PID_kP" ng-change="PID_setParameters()" required></td></tr>
+                            <tr ng-show="motorMode==1"><td>kI </td><td colspan="2"><input type="number" name="input" ng-model="PID_kI" ng-change="PID_setParameters()" required></td></tr>
+                            <tr ng-show="motorMode==1"><td>kD </td><td colspan="2"><input type="number" name="input" ng-model="PID_kD" ng-change="PID_setParameters()" required></td></tr>
                             	<tr>
                             	<td></td>
-                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,manualThrottle])">
-  									<span class="glyphicon glyphicon-menu-up"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="robotMove([0,0])" ng-mousedown="robotMove([1,1])">
+  <span class="glyphicon glyphicon-menu-up"></span></button></td>
                             	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setHorn(0)" ng-mousedown="setHorn(1)">
   									<span class="glyphicon glyphicon-bullhorn"></span></button></td>
                             	</tr>
                             	<tr>
-                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,manualThrottle])">
-  									<span class="glyphicon glyphicon-menu-left"></span></button></td>
-                            	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="setThrottle([0,0])">
-									<span class="glyphicon glyphicon-stop"></span></button></td>
-                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([manualThrottle,-manualThrottle])">
-  									<span class="glyphicon glyphicon-menu-right"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="robotMove([0,0])" ng-mousedown="robotMove([-1,1])">
+  <span class="glyphicon glyphicon-menu-left"></span></button></td>
+                            	<td><button type="button" class="btn btn-danger btn-lg" ng-mousedown="robotMove([0,0])">
+  <span class="glyphicon glyphicon-stop"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="robotMove([0,0])" ng-mousedown="robotMove([1,-1])">
+  <span class="glyphicon glyphicon-menu-right"></span></button></td>
                             	</tr>
                             	<tr>
                             	<td></td>
-                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="setThrottle([0,0])" ng-mousedown="setThrottle([-manualThrottle,-manualThrottle])">
- 									<span class="glyphicon glyphicon-menu-down"></span></button></td>
+                            	<td><button type="button" class="btn btn-default btn-lg" ng-mouseup="robotMove([0,0])" ng-mousedown="robotMove([-1,-1])">
+  <span class="glyphicon glyphicon-menu-down"></span></button></td>
                             	<td></td>
                             	</tr>
                             </tbody>

@@ -6,6 +6,11 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	let keyPressed = [0,0,0,0];
 	let keyPressedOld = [0,0,0,0];
 	let fullThrottle = 1000;
+
+	$scope.PIDmanualSpeed = 1200;
+	$scope.PID_kP = 30;
+	$scope.PID_kI = 20;
+	$scope.PID_kD = 8;
 	
 	$scope.currentItemIndex = -1;
 	$scope.data = {};
@@ -25,6 +30,9 @@ dataApp.controller('dataCtrl', function($scope, $http){
     };
 	var unsortedTimes = new Array();
 	updateClients();
+
+	// 0 = manual, 1 = PID
+	$scope.motorMode = 1;
 
 	$scope.Math = window.Math;
 
@@ -72,12 +80,18 @@ dataApp.controller('dataCtrl', function($scope, $http){
 
 	$scope.stringifyLog = function(checkBoxes, log){
 		
+		if(log == undefined)
+			return ""
 		unsortedTimes = new Array();
 		var str = "";
 		
+		if(log.error != undefined)
 		logCatching(checkBoxes.Error,  	log.error);
+		if(log.warning != undefined)
 		logCatching(checkBoxes.Warning,	log.warning);
+		if(log.info != undefined)
 		logCatching(checkBoxes.Info,		log.info);
+		if(log.debug != undefined)
 		logCatching(checkBoxes.Debug,		log.debug);
 
 		unsortedTimes.sort(function(a,b){return a[0]-b[0]});
@@ -110,20 +124,46 @@ dataApp.controller('dataCtrl', function($scope, $http){
 	function logCatching(chkBox,splitlog){
 		
 		if(chkBox){
-			if(splitlog != undefined){
-				splitlog.forEach(function(item){			
-					unsortedTimes.push([item[0], item[1]]);
-				});
-			}	
+			splitlog.forEach(function(item){			
+				unsortedTimes.push([item[0], item[1]]);
+			});
 		}	
 	}
 
 
 	$scope.setThrottle = function(throttle){
-		if(throttle[0]!=undefined && throttle[1]!=undefined){
+		if($scope.manualThrottle != undefined){
 			socket.emit('robotCommand', "setThrottle", $scope.currentItemIndex, throttle);
 		}
 	};
+
+	$scope.setSpeed = function(speed){
+		if($scope.PIDmanualSpeed != undefined){
+			socket.emit('robotCommand', "setSpeed", $scope.currentItemIndex, speed);
+		}
+	}
+
+	$scope.robotMove = function(values){
+		if($scope.motorMode==0 || (values[0]==0 && values[1]==0)){
+			values[0]*=$scope.manualThrottle;
+			values[1]*=$scope.manualThrottle;
+			$scope.setThrottle(values);
+		}else if($scope.motorMode == 1){
+			values[0]*=$scope.PIDmanualSpeed;
+			values[1]*=$scope.PIDmanualSpeed;
+			$scope.setSpeed(values);
+		}
+	}
+
+	$scope.PID_setParameters = function(){
+		if($scope.PID_kP != undefined && $scope.PID_kI != undefined && $scope.PID_kD != undefined){
+			socket.emit('robotCommand', "setPID", $scope.currentItemIndex, [$scope.PID_kP, $scope.PID_kI, $scope.PID_kD]);
+		}
+	};
+
+	$scope.setMotorMode = function(mode){
+		$scope.motorMode = mode;
+	}
 
 	$scope.setHorn = function(enable){
 		socket.emit('robotCommand', "setHorn", $scope.currentItemIndex, enable);
@@ -169,29 +209,33 @@ dataApp.controller('dataCtrl', function($scope, $http){
 				throttle = [0,0];
 			}else if(arraySum ==1){
 				if(keyPressed[0]){
-					throttle = [$scope.manualThrottle,$scope.manualThrottle];
+					throttle = [1,1];
 				}else if(keyPressed[1]){
-					throttle = [-$scope.manualThrottle,$scope.manualThrottle];
+					throttle = [-1,1];
 				}else if(keyPressed[2]){
-					throttle = [-$scope.manualThrottle,-$scope.manualThrottle];
+					throttle = [-1,-1];
 				}else if(keyPressed[3]){
-					throttle = [$scope.manualThrottle,-$scope.manualThrottle];
+					throttle = [1,-1];
 				}
 			}else{
 				if(keyPressed[0] && keyPressed[1]){
-					throttle = [0,$scope.manualThrottle];
+					throttle = [0,1];
 				}else if(keyPressed[1] && keyPressed[2]){
-					throttle = [0,-$scope.manualThrottle];
+					throttle = [0,-1];
 				}else if(keyPressed[2] && keyPressed[3]){
-					throttle = [-$scope.manualThrottle,0];
+					throttle = [-1,0];
 				}else if(keyPressed[0] && keyPressed[3]){
-					throttle = [$scope.manualThrottle,0];
+					throttle = [1,0];
 				}else{
 					throttle = [0,0];
 				}
 			}
 			if($scope.currentItemIndex > -1){
-				$scope.setThrottle(throttle);
+				if($scope.motorMode==0){
+					$scope.setThrottle([throttle[0]*$scope.manualThrottle, throttle[1]*$scope.manualThrottle]);
+				}else if($scope.motorMode==1){
+					$scope.setSpeed([throttle[0]*$scope.PIDmanualSpeed, throttle[1]*$scope.PIDmanualSpeed]);
+				}
 			}
 		}
 		keyPressedOld = keyPressed.slice(0);

@@ -339,6 +339,22 @@ function answSetHorn(answer, socketBundle){
 
 }
 
+function setPID(socketBundle, value){
+	queueSetter(socketBundle, "SetPID!"+JSON.stringify(value), answSetPID);
+}
+
+function answSetPID(answer, socketBundle){
+
+}
+
+function setSpeed(socketBundle, value){
+	queueSetter(socketBundle, "SetSpeed!"+JSON.stringify(value), answSetSpeed);
+}
+
+function answSetSpeed(answer, socketBundle){
+
+}
+
 // HANDLER
 
 function UICommandHandler(command, index, values){
@@ -348,5 +364,9 @@ function UICommandHandler(command, index, values){
 		setPosition(clients[index], values);
 	}else if(String(command) == "setHorn"){
 		setHorn(clients[index], values);
+	}else if(String(command) == "setPID"){
+		setPID(clients[index], values);
+	}else if(String(command) == "setSpeed"){
+		setSpeed(clients[index], values);
 	}
 }
