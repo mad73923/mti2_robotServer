@@ -107,7 +107,7 @@ function connectionListener(socket){
 		if(knownSocket==undefined){
 			checkValidClient(dataIn, socket);
 		}else{
-			clientLog(knownSocket, "debug", "RX data: "+dataIn);
+			//clientLog(knownSocket, "debug", "RX data: "+dataIn);
 			handleAnswer(dataIn, knownSocket);
 		}
 	});
@@ -224,11 +224,11 @@ function queueSetter(socketBundle, command, next){
 	socketBundle.answerQueue.unshift(next);
 	if(socketBundle.answerQueue.length > 1){
 		socketBundle.commandQueue.unshift(function(){
-			clientLog(socketBundle, "debug", "TX data: "+command);
+			//clientLog(socketBundle, "debug", "TX data: "+command);
 			socketBundle.socket.write(command)
 		});
 	}else{
-		clientLog(socketBundle, "debug", "TX data: "+command);
+		//clientLog(socketBundle, "debug", "TX data: "+command);
 		socketBundle.socket.write(command);
 	}
 }
