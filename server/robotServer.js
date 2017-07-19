@@ -356,6 +356,9 @@ function setSpeed(socketBundle, value){
 }
 
 function answSetSpeed(answer, socketBundle){
+
+}
+
 function answChangeScanmode(answer, socketBundle){
 
 }
@@ -375,5 +378,5 @@ function UICommandHandler(command, index, values){
 		setSpeed(clients[index], values);
 	}else if(String(command) == "changeScanmode"){
 		changeScanMode(clients[index]);
-	}	
+	}
 }
