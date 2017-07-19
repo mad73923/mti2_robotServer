@@ -169,6 +169,10 @@ dataApp.controller('dataCtrl', function($scope, $http){
 		socket.emit('robotCommand', "setHorn", $scope.currentItemIndex, enable);
 	}
 
+	$scope.changeScanmode = function(){
+		socket.emit('robotCommand', "changeScanmode", $scope.currentItemIndex);
+	}
+
 	$scope.keyDown = function(event){
 		if(event.key == "ArrowUp"){
 			keyPressed[0] = 1;
